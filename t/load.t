@@ -1,5 +1,5 @@
 BEGIN {
-	@classes = qw([% module %]);
+	@classes = qw(CPAN::Critic);
 	}
 
 use Test::More tests => scalar @classes;
