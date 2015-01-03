@@ -11,7 +11,10 @@ no warnings;
 use subs qw();
 use vars qw($VERSION);
 
+use Cwd;
 use ReturnValue;
+use File::Find;
+use File::Spec::Functions qw(catfile splitdir);
 
 $VERSION = '0.10_01';
 
@@ -45,39 +48,56 @@ sub new {
 sub _init {
 	my( $self, %args ) = @_;
 	
-	$args{config} //= $self->_default_config;
+	# $args{config} //= $self->_default_config;
 	
 	my $result = $self->_load_default_policies;
+	if( $result->is_error ) {
 	
-	$self->config( $self->_load_config );
+	
+		}
+		
+	my %namespaces = $result->value->%*;
+	my @namespaces = keys %namespaces;
+	
+	$self->{config}{policies} = \@namespaces;
+	# $self->config( $self->_load_config );
 	
 	# remove policies by config
 	
 	$self;
 	}
 
+sub _default_config {
+	'cpan-critic.ini'
+	}
+
 sub _load_default_policies {
 	my( $self ) = @_;
 
 	my %Results;
-	
-	POLICY: foreach $namespace ( $self->_find_policies ) {
-		unless( $namespace =~ m/ [A-Z0-9_]+ (::[A-Z0-9_]+)+ / ) {
-			$Result{_errors}{$namespace} = "Bad policy $namespace: Skipping";
-			$Result{$namespace} = 0;
+	my $errors = 0;
+
+	POLICY: foreach my $namespace ( $self->_find_policies ) {
+		unless( $namespace =~ m/\A [A-Z0-9_]+ (::[A-Z0-9_]+)+ \z/xi ) {
+			$Results{_errors}{$namespace} = "Bad namespace [$namespace]";
+			$Results{$namespace} = 0;
 			next POLICY;
 			}
 			
 		unless( eval "require $namespace; 1" ) {
-			$Result{_errors}{$namespace} = "Problem loading $namespace: $@";
-			$Result{$namespace} = 0;
+			say "Error with $namespace: $@";
+			$Results{_errors}{$namespace} = "Problem loading $namespace: $@";
+			$Results{$namespace} = 0;
+			$errors++;
 			next POLICY;
 			}
 			
-		$Result{$namespace}++;
+		$Results{$namespace}++;
 		}
+	
+	my $method = $errors ? 'error' : 'success';
 		
-	ReturnValue->success(
+	ReturnValue->$method(
 		value => \%Results,
 		);
 	}
@@ -85,7 +105,30 @@ sub _load_default_policies {
 sub _find_policies {
 	my( $self ) = @_;
 
+	my @dirs = map { 
+		File::Spec->catfile( $_, qw(CPAN Critic Policy) )
+		} @INC;
 	
+	my @namespaces;
+	foreach my $dir ( @dirs ) {
+		my @files;	
+		my $wanted = sub { 
+			push @files, 
+				File::Spec::Functions::canonpath( $File::Find::name ) if m/\.pm\z/ 
+				};
+		find( $wanted, $dir );
+		
+		push @namespaces, map {
+			my $rel = File::Spec->abs2rel( $_, $dir );
+			$rel =~ s/\.pm\z//;
+			my @parts = splitdir( $rel );
+			join '::', qw(CPAN Critic Policy), @parts;
+			} @files;
+		#say join "\n\t", "Found", @files;
+		}
+				
+	
+	@namespaces;
 	}
 
 =item config( CONFIG )
@@ -109,13 +152,22 @@ Apply all the policies to the given directory.
 sub critique {
 	my( $self, $dir ) = @_;
 
+	defined $dir or return ReturnValue->error(
+		value       => undef,
+		description => "No directory argument: $!",
+		tag         => 'system',
+		);
+			
 	my $starting_dir = cwd();
 	chdir $dir or return ReturnValue->error(
 		value       => undef,
 		description => "Could not change to directory [$dir]: $!",
 		tag         => 'system',
 		);
+		
+	my @results;
 	foreach my $policy ( $self->policies ) {
+		say "Applying $policy";
 		my $result = $self->apply( $policy );
 		
 		push @results, $result;
@@ -126,9 +178,11 @@ sub critique {
 		description => "Could not change back to original directory [$dir]: $!",
 		tag         => 'system',
 		);
+
+	say Dumper( \@results ); use Data::Dumper;
 		
 	return ReturnValue->success(
-		value => \@results;
+		value => \@results,
 		);
 	}
 
@@ -151,7 +205,12 @@ Return a list of policy objects
 sub policies {
 	my( $self ) = @_;
 	
-	wantarray ? $self->config->{policies}->@* ? [ $self->config->{policies}->@* ];
+	wantarray 
+		? 
+		$self->config->{policies}->@* 
+			: 
+		[ $self->config->{policies}->@* ]
+		;
 	}
 
 =back
