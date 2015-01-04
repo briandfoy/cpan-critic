@@ -19,9 +19,6 @@ sub run {
 			( 0, "$SKIP_FILE does not exist", "not_found" );
 			}
 		elsif( open $fh, '<:utf8', $SKIP_FILE ) {
-			( 0, "Could not open $SKIP_FILE: $!", "open" );
-			}
-		else {
 			my $has_it = 0;
 			
 			while( <$fh> ) {
@@ -31,6 +28,9 @@ sub run {
 				}
 				
 			( $has_it, "Has the default list", "has it" );
+			}
+		else {
+			( 0, "Could not open $SKIP_FILE: $!", "open" );
 			}
 		};
 	
