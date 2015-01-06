@@ -1,0 +1,154 @@
+I'm trying to get hypnotoad with a [Mojolicious::Lite](http://mojolicio.us/perldoc/Mojolicious/Lite) app running on [Heroku](https://www.heroku.com/) with [Perloku](https://github.com/judofyr/perloku). There's something that doesn't happen when [hypnotoad](http://mojolicio.us/perldoc/Mojo/Server/Hypnotoad) gets into its run loop that causes it to crash. I figure I'm missing something simple, but the Heroku docs haven't helped and 
+
+I start with a very simple application so show some environment variables:
+
+	#!/usr/bin/env perl
+	# today
+	use Mojolicious::Lite;
+
+	get '/' => sub {
+		my $c = shift;
+
+		my $content = "Perl: $^X Pid: $$\n\n";
+		foreach my $key ( keys %ENV ) {
+			next unless $key =~ /Mojo|toad/i;
+			$content .= "$key $ENV{$key}\n";
+			}
+
+		$c->stash( content => $content );
+
+		$c->render('index');
+		};
+
+	app->start;
+
+	__DATA__
+
+	@@ index.html.ep
+	% layout 'default';
+	% title 'Welcome';
+	<p>Welcome to the Mojolicious real-time web framework!</p>
+
+	<pre>
+	<%= $content %>
+	</pre>
+
+	@@ layouts/default.html.ep
+	<!DOCTYPE html>
+	<html>
+	  <head><title><%= title %></title></head>
+	  <body><%= content %></body>
+	</html>
+
+When I run this locally, I have no problem. I see from the environment variables that my program is run under hypnotoad:
+
+	Welcome to the Mojolicious real-time web framework!
+
+	Perl: /Users/brian/Dropbox/bin/perls/perl5.20.0 Pid: 40006
+
+	HYPNOTOAD_PID 39981
+	MOJO_HELP 
+	HYPNOTOAD_TEST 
+	HYPNOTOAD_EXE /Users/brian/bin/perls/hypnotoad5.20.0
+	MOJO_REUSE 0.0.0.0:8080:6
+	HYPNOTOAD_REV 3
+	HYPNOTOAD_APP /Users/brian/Desktop/toady.d/toady
+	MOJO_MODE production
+	MOJO_HOME
+	HYPNOTOAD_STOP 
+	HYPNOTOAD_FOREGROUND
+		
+Now, I deploy this with [Mojolicious::Command::deploy::heroku](http://www.metacpan.org/module/Mojolicious::Command::deploy::heroku):
+
+	% toady deploy heroku --create
+
+This is running at [https://frozen-brushlands-4002.herokuapp.com](https://frozen-brushlands-4002.herokuapp.com), using the default Perloku file:
+
+	#!/bin/sh
+	./toady daemon --listen http://*:$PORT --mode production
+
+This isn't running hypnotoad though, despite some references I've seen that says that's what I should get. The application works, though:
+
+	Welcome to the Mojolicious real-time web framework!
+
+	Perl: /app/vendor/perl/bin/perl Pid: 3
+
+	MOJO_REUSE 0.0.0.0:12270:4
+	MOJO_HOME 
+	MOJO_HELP 
+	MOJO_MODE production
+	MOJO_EXE ./toady
+
+I figured I could just change the Perloku file to start hypnotoad:
+
+	#!/bin/sh
+	/app/vendor/perl/bin/perl /app/vendor/perl-deps/bin/hypnotoad toady
+
+hypnotoad starts and almost immediately shuts down with no other log messages:
+
+	% heroku logs --app ...
+	2015-01-04T09:23:36.516864+00:00 heroku[web.1]: Starting process with command `./Perloku`
+	2015-01-04T09:23:38.321628+00:00 heroku[web.1]: State changed from starting to crashed
+
+I can change the invocation to use the `-t` to test the app to see if :
+
+	#!/bin/sh
+	/app/vendor/perl/bin/perl /app/vendor/perl-deps/bin/hypnotoad -t toady
+	
+That works and I get the "Everything looks good!" message, so hypnotoad is running:
+
+	2015-01-04T09:36:36.955680+00:00 heroku[web.1]: Starting process with command `./Perloku`
+	2015-01-04T09:36:38.340717+00:00 app[web.1]: Everything looks good!
+	2015-01-04T09:36:39.085887+00:00 heroku[web.1]: State changed from starting to crashed
+
+I turn on Mojo debug logging, but I don't see additional output other than my own statements.
+
+	#!/usr/bin/env perl
+	use Mojolicious::Lite;
+
+	$|++;
+
+	my $log = app->log;
+
+	$log->level( 'debug' );
+
+	$log->debug( "INC: @INC" );
+
+	get '/' => sub {
+		...;
+		};
+
+	$log->debug( "Right before start" );
+	my $app = app->start;
+	$log->debug( "Right after start" );
+
+	$app; # must return application object
+
+I tried other things, such as making it load a module I know is not there and I get the expected "Could not find" error in the logs.
+
+Running from the shell in heroku (`heroku run bash`), it looks like it starts just fine in the foreground:
+
+	% heroku run bash --app salty-fortress-1483
+	Running `bash` attached to terminal... up, run.8048
+
+	~ $ /app/vendor/perl/bin/perl /app/vendor/perl-deps/bin/hypnotoad --foreground toady
+	[Sun Jan  4 22:36:24 2015] [debug] INC: /app/vendor/perl-deps/lib/perl5/x86_64-linux /app/vendor/perl-deps/lib/perl5/x86_64-linux /app/vendor/perl-deps/lib/perl5 /app/vendor/perl/lib/site_perl/5.16.2/x86_64-linux /app/vendor/perl/lib/site_perl/5.16.2 /app/vendor/perl/lib/5.16.2/x86_64-linux /app/vendor/perl/lib/5.16.2 .
+	[Sun Jan  4 22:36:24 2015] [debug] Right before start
+	[Sun Jan  4 22:36:24 2015] [debug] Right after start
+	[Sun Jan  4 22:36:24 2015] [info] Listening at "http://*:8080".
+	Server available at http://127.0.0.1:8080.
+	[Sun Jan  4 22:36:24 2015] [info] Manager 3 started.
+	[Sun Jan  4 22:36:24 2015] [debug] Worker 4 started.
+	[Sun Jan  4 22:36:24 2015] [debug] Worker 5 started.
+	[Sun Jan  4 22:36:24 2015] [debug] Worker 6 started.
+	[Sun Jan  4 22:36:24 2015] [info] Creating process id file "/app/hypnotoad.pid".
+	[Sun Jan  4 22:36:24 2015] [debug] Worker 7 started.
+
+I modify my program a little to add some hypnotoad configuration:
+
+	app->config(
+		hypnotoad => {
+			listen => ['http://*:80'],
+			},
+		);
+
