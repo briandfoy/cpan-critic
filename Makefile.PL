@@ -5,6 +5,8 @@ use warnings;
 use File::Spec::Functions qw(catfile);
 
 my $module    = 'CPAN::Critic';
+( my $dist = $module ) =~ s/::/-/g;
+
 my $github    = 'https://github.com/briandfoy/CPAN-Critic';
 my $main_file = catfile( 'lib', split /::/, "$module.pm" );
 
