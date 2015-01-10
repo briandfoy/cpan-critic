@@ -1,10 +1,12 @@
 require 5.012;
+
+package CPAN::Critic;
 use strict;
 use warnings;
 
 use File::Spec::Functions qw(catfile);
 
-my $module    = 'CPAN::Critic';
+my $module    = __PACKAGE__;
 ( my $dist = $module ) =~ s/::/-/g;
 
 my $github    = 'https://github.com/briandfoy/CPAN-Critic';
