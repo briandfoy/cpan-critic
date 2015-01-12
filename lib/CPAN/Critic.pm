@@ -167,7 +167,6 @@ sub critique {
 
 	my @results;
 	foreach my $policy ( $self->policies ) {
-		say "Applying $policy";
 		my $result = $self->apply( $policy );
 
 		push @results, $result;
@@ -178,8 +177,6 @@ sub critique {
 		description => "Could not change back to original directory [$dir]: $!",
 		tag         => 'system',
 		);
-
-	say Dumper( \@results ); use Data::Dumper;
 
 	return ReturnValue->success(
 		value => \@results,
