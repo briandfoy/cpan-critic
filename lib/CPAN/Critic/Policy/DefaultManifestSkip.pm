@@ -40,10 +40,10 @@ sub run {
 	my $method = $value ? 'success' : 'error';
 
 	ReturnValue->$method(
-		value      => $value,
-		decription => $description,
-		tag        => $tag,
-		policy     => __PACKAGE__,
+		value       => $value,
+		description => $description,
+		tag         => $tag,
+		policy      => __PACKAGE__,
 		);
 	}
 

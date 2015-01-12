@@ -14,7 +14,7 @@ sub check_if_modulino {
 	unless( -e $FILE ) {
 		return ReturnValue->error(
 			value      => 0,
-			decription => "$FILE is there",
+			description => "$FILE is there",
 			tag        => 'found',
 			policy     => $policy,
 			);
@@ -27,7 +27,7 @@ sub check_if_modulino {
 	if( $at ) {
 		return ReturnValue->error(
 			value      => 0,
-			decription => "$FILE loads",
+			description => "$FILE loads",
 			tag        => '???',
 			policy     => $policy,
 			);
@@ -36,7 +36,7 @@ sub check_if_modulino {
 	unless( eval{ $package->can( 'arguments' ) } ) {
 		return ReturnValue->error(
 			value      => 0,
-			decription => "$FILE->arguments is available",
+			description => "$FILE->arguments is available",
 			tag        => '???',
 			policy     => $policy,
 			);
@@ -47,7 +47,7 @@ sub check_if_modulino {
 	unless( ref $args eq ref {} ) {
 		return ReturnValue->error(
 			value      => 0,
-			decription => "$FILE->arguments does not return a hash ref",
+			description => "$FILE->arguments does not return a hash ref",
 			tag        => '???',
 			policy     => $policy,
 			);
