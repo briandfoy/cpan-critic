@@ -17,11 +17,14 @@ sub run {
 
 	my $args = $rv->value;
 
-	my $object = bless {
-		DISTNAME => $args->{NAME},
-		}, 'ExtUtils::MM_Unix';
+	no warnings 'uninitialized';
+	my $abstract = eval {
+		my $object = bless {
+			DISTNAME => $args->{NAME},
+			}, 'ExtUtils::MM_Unix';
 
-	my $abstract = eval { $object->parse_abstract( $args->{ABSTRACT_FROM} ) };
+		$object->parse_abstract( $args->{ABSTRACT_FROM} )
+		};
 
 	my( $value, $description, $tag ) = do {
 		if( ! exists $args->{ABSTRACT_FROM} ) {
@@ -34,7 +37,6 @@ sub run {
 			( 0, 'ABSTRACT_FROM file is readable', 'found' );
 			}
 		elsif( ! $abstract ) {
-			say "Error: $@\nAbstract: $abstract";
 			( 0, 'ABSTRACT_FROM is there', '???' );
 			}
 		elsif( $abstract =~ m/This/ ) {
