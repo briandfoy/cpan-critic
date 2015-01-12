@@ -1,7 +1,5 @@
 package CPAN::Critic::Policy::ABSTRACT_FROM;
 use v5.10;
-
-
 use strict;
 use warnings;
 
@@ -17,7 +15,7 @@ sub run {
 		);
 
 	my $method = $value ? 'success' : 'error';
-	
+
 	ReturnValue->$method(
 		value      => $value,
 		decription => $description,
