@@ -3,6 +3,7 @@ use v5.20;
 use feature qw(postderef);
 
 use FindBin qw($Bin);
+use File::Basename;
 
 use lib "$Bin/lib";
 use lib qw(
@@ -13,22 +14,32 @@ use CPAN::Critic;
 
 my $critic = CPAN::Critic->new;
 
-my $rc = $critic->critique( '/Users/brian/Dev/ReturnValue' );
+@ARGV = '.' unless @ARGV;
 
-if( $rc->is_success ) {
-	my $results = $rc->value;
+# find . -name "Makefile.PL" -print0 | xargs -0 cpan-critic
+my @dirs = map {
+	/Makefile.PL$/ ? dirname($_) : $_;
+	} @ARGV;
 
-	foreach my $result ( $results->@* ) {
-		printf "%4s <- %s\n", $result->value ? 'PASS' : 'FAIL', $result->policy;
+foreach my $dir ( @dirs ) {
+	say "===========Processing $dir";
+	my $rc = $critic->critique( $dir );
 
-		unless( $result->value ) {
-			say Dumper( $result ); use Data::Dumper;
-			say "\tProblem: ", $result->description;
+	if( $rc->is_success ) {
+		my $results = $rc->value;
+
+		foreach my $result ( $results->@* ) {
+			printf "%4s <- %s\n", $result->value ? 'PASS' : 'FAIL', $result->policy;
+
+			unless( $result->value ) {
+				say Dumper( $result ); use Data::Dumper;
+				say "\tProblem: ", $result->description;
+				}
 			}
 		}
-	}
-else {
-	say "Big problem: ", $result->description;
+	else {
+		say "Big problem: ", $rc->description;
+		}
 	}
 
 1;
