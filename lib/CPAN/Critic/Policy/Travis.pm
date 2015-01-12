@@ -18,10 +18,10 @@ sub run {
 		if( ! -e $FILE ) {
 			( 0, "$FILE exists", "found" );
 			}
-		elsif( -r $FILE ) {
+		elsif( ! -r $FILE ) {
 			( 0, "$FILE is readable", "open" );
 			}
-		elsif( -s $FILE ) {
+		elsif( ! -s $FILE ) {
 			( 0, "$FILE has non-zero size", "size" );
 			}
 		else {
