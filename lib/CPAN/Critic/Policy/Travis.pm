@@ -7,15 +7,28 @@ use warnings;
 
 use ReturnValue;
 
+my $FILE = '.travis.yml';
+
 sub run {
 	my( $class, @args ) = @_;
 
-	my( $value, $description, $tag ) = (
-		1,
-		'Null',
-		'null'	
-		);
+	my $fh;
 
+	my( $value, $description, $tag ) = do {
+		if( ! -e $FILE ) {
+			( 0, "$FILE exists", "found" );
+			}
+		elsif( -r $FILE ) {
+			( 0, "$FILE is readable", "open" );
+			}
+		elsif( -s $FILE ) {
+			( 0, "$FILE has non-zero size", "size" );
+			}
+		else {
+			( 1, "$FILE is good", 'good' );
+			}
+		};
+	
 	my $method = $value ? 'success' : 'error';
 	
 	ReturnValue->$method(
