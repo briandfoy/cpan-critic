@@ -204,12 +204,14 @@ Return a list of policy objects
 
 sub policies {
 	my( $self ) = @_;
-	
-	wantarray 
-		? 
-		$self->config->{policies}->@* 
-			: 
-		[ $self->config->{policies}->@* ]
+
+	my @policies = grep { ! /\A_/ } $self->config->{policies}->@*;
+
+	wantarray
+		?
+		@policies
+			:
+		[ @policies ]
 		;
 	}
 
