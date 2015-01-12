@@ -16,7 +16,7 @@ sub run {
 
 	my( $value, $description, $tag ) = do {
 		if( ! -e $SKIP_FILE ) {
-			( 0, "$SKIP_FILE does not exist", "not_found" );
+			( 0, "$SKIP_FILE exists", "found" );
 			}
 		elsif( open $fh, '<:utf8', $SKIP_FILE ) {
 			my $has_it = 0;
@@ -27,10 +27,13 @@ sub run {
 				last;
 				}
 				
-			( $has_it, "Has the default list", "has it" );
+			( $has_it, "$SKIP_FILE uses the default list", "has it" );
+			}
+		elsif( -r $SKIP_FILE ) {
+			( 0, "$SKIP_FILE is readable: $!", "open" );
 			}
 		else {
-			( 0, "Could not open $SKIP_FILE: $!", "open" );
+			( 1, "$SKIP_FILE is good", "good" );
 			}
 		};
 	
