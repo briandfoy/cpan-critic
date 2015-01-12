@@ -39,31 +39,31 @@ CPAN::Critic - Critique a CPAN distribution
 sub new {
 	my( $class ) = shift;
 	my $self = bless {}, $class;
-	
+
 	$self->_init( @_ );
-	
+
 	$self;
 	}
-	
+
 sub _init {
 	my( $self, %args ) = @_;
-	
+
 	# $args{config} //= $self->_default_config;
-	
+
 	my $result = $self->_load_default_policies;
 	if( $result->is_error ) {
-	
-	
+
+
 		}
-		
+
 	my %namespaces = $result->value->%*;
 	my @namespaces = keys %namespaces;
-	
+
 	$self->{config}{policies} = \@namespaces;
 	# $self->config( $self->_load_config );
-	
+
 	# remove policies by config
-	
+
 	$self;
 	}
 
@@ -83,7 +83,7 @@ sub _load_default_policies {
 			$Results{$namespace} = 0;
 			next POLICY;
 			}
-			
+
 		unless( eval "require $namespace; 1" ) {
 			say "Error with $namespace: $@";
 			$Results{_errors}{$namespace} = "Problem loading $namespace: $@";
@@ -91,12 +91,12 @@ sub _load_default_policies {
 			$errors++;
 			next POLICY;
 			}
-			
+
 		$Results{$namespace}++;
 		}
-	
+
 	my $method = $errors ? 'error' : 'success';
-		
+
 	ReturnValue->$method(
 		value => \%Results,
 		);
@@ -105,19 +105,19 @@ sub _load_default_policies {
 sub _find_policies {
 	my( $self ) = @_;
 
-	my @dirs = map { 
+	my @dirs = map {
 		File::Spec->catfile( $_, qw(CPAN Critic Policy) )
 		} @INC;
-	
+
 	my @namespaces;
 	foreach my $dir ( @dirs ) {
-		my @files;	
-		my $wanted = sub { 
-			push @files, 
-				File::Spec::Functions::canonpath( $File::Find::name ) if m/\.pm\z/ 
+		my @files;
+		my $wanted = sub {
+			push @files,
+				File::Spec::Functions::canonpath( $File::Find::name ) if m/\.pm\z/
 				};
 		find( $wanted, $dir );
-		
+
 		push @namespaces, map {
 			my $rel = File::Spec->abs2rel( $_, $dir );
 			$rel =~ s/\.pm\z//;
@@ -126,8 +126,8 @@ sub _find_policies {
 			} @files;
 		#say join "\n\t", "Found", @files;
 		}
-				
-	
+
+
 	@namespaces;
 	}
 
@@ -137,9 +137,9 @@ sub _find_policies {
 
 sub config {
 	my( $self ) = shift;
-	
+
 	$self->{config} = $_[0] if @_;
-	
+
 	$self->{config}
 	}
 
@@ -157,19 +157,19 @@ sub critique {
 		description => "No directory argument: $!",
 		tag         => 'system',
 		);
-			
+
 	my $starting_dir = cwd();
 	chdir $dir or return ReturnValue->error(
 		value       => undef,
 		description => "Could not change to directory [$dir]: $!",
 		tag         => 'system',
 		);
-		
+
 	my @results;
 	foreach my $policy ( $self->policies ) {
 		say "Applying $policy";
 		my $result = $self->apply( $policy );
-		
+
 		push @results, $result;
 		}
 
@@ -180,7 +180,7 @@ sub critique {
 		);
 
 	say Dumper( \@results ); use Data::Dumper;
-		
+
 	return ReturnValue->success(
 		value => \@results,
 		);
@@ -192,7 +192,7 @@ sub critique {
 
 sub apply {
 	my( $self, $policy ) = @_;
-	
+
 	$policy->run();
 	}
 

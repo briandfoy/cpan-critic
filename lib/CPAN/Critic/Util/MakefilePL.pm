@@ -6,7 +6,7 @@ my $FILE = "Makefile.PL";
 
 sub check_if_modulino {
 	my( $class, $arg ) = @_;
-	
+
 	my( $policy ) = ( caller(1) )[0];
 
 	$FILE = $arg if $arg;
@@ -19,7 +19,7 @@ sub check_if_modulino {
 			policy     => $policy,
 			);
 		}
-	
+
 	delete $INC{$FILE};
 	my $package = eval "require '$FILE'";
 	my $at = $@;
@@ -32,16 +32,16 @@ sub check_if_modulino {
 			policy     => $policy,
 			);
 		}
-		
+
 	unless( eval{ $package->can( 'arguments' ) } ) {
 		return ReturnValue->error(
 			value      => 0,
 			decription => "$FILE->arguments is available",
 			tag        => '???',
 			policy     => $policy,
-			);	
+			);
 		}
-	
+
 
 	my $args = eval { $package->arguments };
 	unless( ref $args eq ref {} ) {

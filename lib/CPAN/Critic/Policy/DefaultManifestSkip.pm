@@ -20,13 +20,13 @@ sub run {
 			}
 		elsif( open $fh, '<:utf8', $SKIP_FILE ) {
 			my $has_it = 0;
-			
+
 			while( <$fh> ) {
 				next unless /\A#!(?:start included|include_default)/;
 				$has_it = 1;
 				last;
 				}
-				
+
 			( $has_it, "$SKIP_FILE uses the default list", "has it" );
 			}
 		elsif( -r $SKIP_FILE ) {
@@ -36,9 +36,9 @@ sub run {
 			( 1, "$SKIP_FILE is good", "good" );
 			}
 		};
-	
+
 	my $method = $value ? 'success' : 'error';
-	
+
 	ReturnValue->$method(
 		value      => $value,
 		decription => $description,

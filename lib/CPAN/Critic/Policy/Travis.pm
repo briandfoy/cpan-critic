@@ -28,9 +28,9 @@ sub run {
 			( 1, "$FILE is good", 'good' );
 			}
 		};
-	
+
 	my $method = $value ? 'success' : 'error';
-	
+
 	ReturnValue->$method(
 		value      => $value,
 		decription => $description,

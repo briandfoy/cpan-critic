@@ -14,11 +14,11 @@ sub run {
 	my( $value, $description, $tag ) = (
 		1,
 		'Null',
-		'null'	
+		'null'
 		);
 
 	my $method = $value ? 'success' : 'error';
-	
+
 	ReturnValue->$method(
 		value      => $value,
 		decription => $description,
