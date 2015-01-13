@@ -1,6 +1,7 @@
 #!/Users/brian/bin/perls/perl5.20.0
 use v5.20;
 use feature qw(postderef);
+no warnings qw(experimental::postderef);
 
 use FindBin qw($Bin);
 use File::Basename;
