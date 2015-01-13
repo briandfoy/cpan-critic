@@ -2,6 +2,24 @@ package CPAN::Critic::Util::MakefilePL;
 use strict;
 use warnings;
 
+=encoding utf8
+
+=head1 NAME
+
+CPAN::Critic::Util::MakefilePL - Do things with the Makefile.PL
+
+=head1 SYNOPSIS
+
+	use CPAN::Critic;
+
+=head1 DESCRIPTION
+
+=over 4
+
+=item new
+
+=cut
+
 my $FILE = "Makefile.PL";
 
 sub check_if_modulino {

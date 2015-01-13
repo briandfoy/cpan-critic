@@ -4,6 +4,24 @@ use v5.10;
 
 use strict;
 use warnings;
+=encoding utf8
+
+=head1 NAME
+
+CPAN::Critic::Policy::Travis - Check the Travis CI configuration file
+
+=head1 SYNOPSIS
+
+	use CPAN::Critic;
+
+=head1 DESCRIPTION
+
+=over 4
+
+=item new
+
+=cut
+
 
 use ReturnValue;
 

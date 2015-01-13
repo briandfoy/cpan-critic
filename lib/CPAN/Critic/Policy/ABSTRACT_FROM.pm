@@ -7,6 +7,24 @@ use ReturnValue;
 use ExtUtils::MM_Unix;
 use CPAN::Critic::Util::MakefilePL;
 
+=encoding utf8
+
+=head1 NAME
+
+CPAN::Critic::Policy::ABSTRACT_FROM - Check that the ABSTRACT_FROM is in the Makefile.PL
+
+=head1 SYNOPSIS
+
+	use CPAN::Critic;
+
+=head1 DESCRIPTION
+
+=over 4
+
+=item new
+
+=cut
+
 my $FILE = 'Makefile.PL';
 
 sub run {

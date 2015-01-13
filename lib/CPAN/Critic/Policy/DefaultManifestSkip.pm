@@ -7,6 +7,24 @@ use warnings;
 use ReturnValue;
 use Cwd;
 
+=encoding utf8
+
+=head1 NAME
+
+CPAN::Critic::Policy::DefaultManifestSkip - Check MANIFEST.SKIP uses the defaults
+
+=head1 SYNOPSIS
+
+	use CPAN::Critic;
+
+=head1 DESCRIPTION
+
+=over 4
+
+=item new
+
+=cut
+
 my $SKIP_FILE = 'MANIFEST.SKIP';
 
 sub run {
