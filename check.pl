@@ -30,11 +30,19 @@ foreach my $dir ( @dirs ) {
 		my $results = $rc->value;
 
 		foreach my $result ( $results->@* ) {
-			printf "%4s <- %s\n", $result->value ? 'PASS' : 'FAIL', $result->policy;
+			printf "%4s <- %s\n", $result->is_success ? 'PASS' : 'FAIL', $result->policy;
 
-			unless( $result->value ) {
-				say Dumper( $result ); use Data::Dumper;
-				say "\tProblem: ", $result->description;
+			unless( $result->is_success ) {
+				say "\tProblem: ";
+				my $value = $result->value;
+				unless( ref $value ) {
+					say "\t\t" . $result->description;
+					}
+				elsif( ref $value eq ref [] ) {
+					foreach my $r ( @$value	) {
+						say "\t\t" . $r->description;
+						}
+					}
 				}
 			}
 		}
