@@ -1,10 +1,10 @@
 package CPAN::Critic::Policy::CONTRIBUTING;
 use v5.10;
 
-
 use strict;
 use warnings;
 
+use ReturnValue;
 
 =encoding utf8
 
@@ -23,8 +23,6 @@ CPAN::Critic::Policy::CONTRIBUTING - Check that there's a contributing document
 =item new
 
 =cut
-
-use ReturnValue;
 
 sub run {
 	my( $class, @args ) = @_;

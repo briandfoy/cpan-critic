@@ -1,9 +1,9 @@
 package CPAN::Critic::Policy::Travis;
 use v5.10;
 
-
 use strict;
 use warnings;
+
 =encoding utf8
 
 =head1 NAME
@@ -21,7 +21,6 @@ CPAN::Critic::Policy::Travis - Check the Travis CI configuration file
 =item new
 
 =cut
-
 
 use ReturnValue;
 

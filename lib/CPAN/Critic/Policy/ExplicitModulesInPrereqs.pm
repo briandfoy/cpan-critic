@@ -1,10 +1,10 @@
 package CPAN::Critic::Policy::ExplicitModulesInPrereqs;
 use v5.10;
 
-
 use strict;
 use warnings;
 
+use ReturnValue;
 
 =encoding utf8
 
@@ -23,8 +23,6 @@ CPAN::Critic::Policy::ExplicitModulesInPrereqs - Check that all used modules sho
 =item new
 
 =cut
-
-use ReturnValue;
 
 sub run {
 	my( $class, @args ) = @_;

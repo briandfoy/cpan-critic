@@ -52,7 +52,6 @@ sub run {
 		policy      => __PACKAGE__,
 		);
 	}
-	}
 
 
 __PACKAGE__;

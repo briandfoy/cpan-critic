@@ -1,11 +1,11 @@
 package CPAN::Critic::Policy::SeeAlso;
 use v5.10;
 
-
 use strict;
 use warnings;
 
 use ReturnValue;
+
 =encoding utf8
 
 =head1 NAME
@@ -23,7 +23,6 @@ CPAN::Critic::Policy::SeeAlso - Check for SEE ALSO, somewhere
 =item new
 
 =cut
-
 
 sub run {
 	my( $class, @args ) = @_;
