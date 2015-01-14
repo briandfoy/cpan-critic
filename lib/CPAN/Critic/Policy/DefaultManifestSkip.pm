@@ -36,7 +36,7 @@ sub run {
 		if( ! -e $SKIP_FILE ) {
 			( 0, "$SKIP_FILE exists", "found" );
 			}
-		elsif( -r $SKIP_FILE ) {
+		elsif( ! -r $SKIP_FILE ) {
 			( 0, "$SKIP_FILE is readable: $!", "open" );
 			}
 		elsif( open $fh, '<:utf8', $SKIP_FILE ) {
