@@ -5,6 +5,8 @@ use strict;
 use warnings;
 
 use ReturnValue;
+use CPAN::Changes;
+use version;
 
 =encoding utf8
 
@@ -24,23 +26,61 @@ CPAN::Critic::Policy::Changes - Check the Changes file
 
 =cut
 
+my $FILE = 'Changes';
+
 sub run {
 	my( $class, @args ) = @_;
 
-	my( $value, $description, $tag ) = (
-		1,
-		'Null',
-		'null'
-		);
+    my $changes = eval { CPAN::Changes->load( $FILE ) };
+	my $at = $@;
+	
+	return ReturnValue->error(
+		value  => $at,
+		description => "Parsed the Changes file",
+		policy => __PACKAGE__,
+		) if $at;
+        	
+    my @releases = $changes->releases;
+	return ReturnValue->error(
+		value       => 0,
+		description => "The Changes file has releases",
+		policy      => __PACKAGE__,
+		) unless @releases;
 
-	my $method = $value ? 'success' : 'error';
+	my @results;
+    foreach my $release ( @releases ) {
+        if ( !defined $release->date || $_->release eq ''  ) {
+			push @results, ReturnValue->error(
+				value       => 0,
+				description => "No date for version " . $release->version,
+				);
+        	}
+
+		unless( $release->{_parsed_date} =~ m/\A${CPAN::Changes::W3CDTF_REGEX}\z/ ) {
+			push @results, ReturnValue->error(
+				value       => 0,
+				description => "The date for version " . $release->version . " is the right format",
+				parsed_date => $release->{_parsed_date},
+				);
+			}
+		
+        # strip off -TRIAL before testing
+        (my $version = $release->version) =~ s/-TRIAL$//;
+        if( not version::is_lax($version) ) {
+			push @results, ReturnValue->error(
+				value       => 0,
+				description => "The version is the right format",
+				version     => $version,
+				);
+			}
+        }
+
+	my $method = @results ? 'error' : 'success';
 
 	ReturnValue->$method(
-		value       => $value,
-		description => $description,
-		tag         => $tag,
-		policy      => __PACKAGE__,
+		value  => \@results,
+		policy => $class,
 		);
-	}
+    }
 
 __PACKAGE__;

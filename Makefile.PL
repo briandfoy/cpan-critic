@@ -32,6 +32,7 @@ my %WriteMakefile = (
 		},
 
 	'PREREQ_PM'     => {
+		'CPAN::Changes'               => '0',
 		'Cwd'                         => '0',
 		'ExtUtils::MM_Unix'           => '0',
 		'File::Find'                  => '0',
