@@ -166,7 +166,7 @@ sub critique {
 		);
 
 	my @results;
-	foreach my $policy ( $self->policies ) {
+	foreach my $policy ( sort $self->policies ) {
 		chdir $dir;
 		my $result = $self->apply( $policy );
 
