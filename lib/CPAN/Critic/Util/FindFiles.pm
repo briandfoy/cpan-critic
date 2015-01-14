@@ -1,4 +1,5 @@
 package CPAN::Critic::Util::FindFiles;
+use 5.008;
 use strict;
 use warnings;
 
@@ -27,7 +28,7 @@ sub get_module_files { $_[0]->find_by_extension( 'pm' ) }
 
 sub get_pod_files    { $_[0]->find_by_extension( 'pod' ) }
 
-sub get_test_files    { $_[0]->find_by_extension( 't' ) }
+sub get_test_files   { $_[0]->find_by_extension( 't' ) }
 
 sub find_by_name {
 	my( $class, @names ) = @_;

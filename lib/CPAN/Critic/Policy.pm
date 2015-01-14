@@ -1,4 +1,5 @@
 package CPAN::Critic::Policy;
+use 5.008;
 
 =encoding utf8
 
