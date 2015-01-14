@@ -2,6 +2,9 @@ package CPAN::Critic::Util::MakefilePL;
 use strict;
 use warnings;
 
+use Cwd                   qw(getcwd);
+use File::Spec::Functions qw(rel2abs);
+
 =encoding utf8
 
 =head1 NAME
@@ -22,6 +25,8 @@ CPAN::Critic::Util::MakefilePL - Do things with the Makefile.PL
 
 my $FILE = "Makefile.PL";
 
+my $REGISTRY = {};
+
 sub check_if_modulino {
 	my( $class, $arg ) = @_;
 
@@ -29,7 +34,9 @@ sub check_if_modulino {
 
 	$FILE = $arg if $arg;
 
-	unless( -e $FILE ) {
+	my $path = rel2abs( $FILE, getcwd );
+	
+	unless( -e $path ) {
 		return ReturnValue->error(
 			value      => 0,
 			description => "$FILE is there",
@@ -38,8 +45,15 @@ sub check_if_modulino {
 			);
 		}
 
-	delete $INC{$FILE};
-	my $package = eval "require '$FILE'";
+	if( exists $REGISTRY{$path} ) {
+		return ReturnValue->success(
+			value => $REGISTRY{$path},
+			file  => $path,
+			)
+		}
+
+	delete $INC{$path};
+	my $package = eval "require '$path'";
 	my $at = $@;
 
 	if( $at ) {
@@ -60,7 +74,6 @@ sub check_if_modulino {
 			);
 		}
 
-
 	my $args = eval { $package->arguments };
 	unless( ref $args eq ref {} ) {
 		return ReturnValue->error(
@@ -71,8 +84,11 @@ sub check_if_modulino {
 			);
 		}
 
+	$REGISTRY{$path} = $args;
+
 	ReturnValue->success(
 		value => $args,
+		file  => $path,
 		);
 	}
 
