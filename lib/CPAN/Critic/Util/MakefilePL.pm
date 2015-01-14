@@ -27,6 +27,10 @@ my $FILE = "Makefile.PL";
 
 my $REGISTRY = {};
 
+sub get_args {
+	$_[0]->check_if_modulino;
+	}
+
 sub check_if_modulino {
 	my( $class, $arg ) = @_;
 
