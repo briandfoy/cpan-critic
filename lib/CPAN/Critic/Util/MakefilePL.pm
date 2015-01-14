@@ -45,9 +45,9 @@ sub check_if_modulino {
 			);
 		}
 
-	if( exists $REGISTRY{$path} ) {
+	if( exists $REGISTRY->{$path} ) {
 		return ReturnValue->success(
-			value => $REGISTRY{$path},
+			value => $REGISTRY->{$path},
 			file  => $path,
 			)
 		}
@@ -84,7 +84,7 @@ sub check_if_modulino {
 			);
 		}
 
-	$REGISTRY{$path} = $args;
+	$REGISTRY->{$path} = $args;
 
 	ReturnValue->success(
 		value => $args,
