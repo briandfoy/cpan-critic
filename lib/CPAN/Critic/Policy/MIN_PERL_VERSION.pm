@@ -1,4 +1,4 @@
-package CPAN::Critic::Policy::MinimumVersion;
+package CPAN::Critic::Policy::MIN_PERL_VERSION;
 use v5.10;
 
 use strict;
@@ -10,7 +10,7 @@ use ReturnValue;
 
 =head1 NAME
 
-CPAN::Critic::Policy::MinimumVersion - Check that the declared minimum version matches the actual one
+CPAN::Critic::Policy::MIN_PERL_VERSION - Check that the declared minimum version matches the actual one
 
 =head1 SYNOPSIS
 
