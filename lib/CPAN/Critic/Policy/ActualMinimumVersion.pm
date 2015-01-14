@@ -1,5 +1,5 @@
 package CPAN::Critic::Policy::ActualMinimumVersion;
-use 5.008;
+use v5.10;
 
 use strict;
 use warnings;
@@ -58,11 +58,14 @@ sub run {
 	my $modules = CPAN::Critic::Util::FindFiles->get_module_files->value;
 
 	my @results;
-	
+	my @syntax_versions;
 	foreach my $module ( sort @$modules ) {
 		no warnings 'uninitialized';
 		my $p = Perl::MinimumVersion::Fast->new( $module );
+
 		my $syntax_v   = $p->minimum_syntax_version;
+		push @syntax_versions, $syntax_v;
+
 		my $declared_v = $p->minimum_explicit_version;
 
 		my $declared_v_default = $declared_v || version->new( '5.008' );
@@ -98,6 +101,18 @@ sub run {
 				syntax_version   => $syntax_v,
 				);
 			}
+			
+		}
+
+	my $max_syntax_version = max( @syntax_versions );
+
+	if( version->new( $args->{MIN_PERL_VERSION} ) > $max_syntax_version ) {
+		push @results, ReturnValue->error(
+			value            => 0,
+			description      => "The build file MIN_PERL_VERSION [$args->{MIN_PERL_VERSION}] is greater than the maximum syntax perl version [$max_syntax_version]",
+			declared_version => $args->{MIN_PERL_VERSION},
+			syntax_version   => $max_syntax_version,
+			);
 		}
 
 	my $method = @results ? 'error' : 'success';
