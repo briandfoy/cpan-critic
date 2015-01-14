@@ -30,7 +30,7 @@ my $FILE = 'Makefile.PL';
 sub run {
 	my( $class, @args ) = @_;
 
-	my $rv = CPAN::Critic::Util::MakefilePL->check_if_modulino();
+	my $rv = CPAN::Critic::Util::MakefilePL->get_args();
 	return $rv unless $rv->is_success;
 
 	my $args = $rv->value;
