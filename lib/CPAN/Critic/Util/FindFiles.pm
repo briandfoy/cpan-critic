@@ -23,6 +23,12 @@ CPAN::Critic::Util::FindFiles - Find files easily
 
 =cut
 
+sub get_module_files { $_[0]->find_by_extension( 'pm' ) }
+
+sub get_pod_files    { $_[0]->find_by_extension( 'pod' ) }
+
+sub get_test_files    { $_[0]->find_by_extension( 't' ) }
+
 sub find_by_name {
 	my( $class, @names ) = @_;
 	my %names = map { $_, 1 } @names;
