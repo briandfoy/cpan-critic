@@ -32,6 +32,13 @@ my %WriteMakefile = (
 		},
 
 	'PREREQ_PM'     => {
+		'Cwd'                         => '0',
+		'ExtUtils::MM_Unix'           => '0',
+		'File::Find'                  => '0',
+		'File::Spec::Functions'       => '0',
+		'Module::Extract::Namespaces' => '0',
+		'Perl::MinimumVersion::Fast'  => '0',
+		'ReturnValue'                 => '0',
 		},
 
 	'META_MERGE' => {
