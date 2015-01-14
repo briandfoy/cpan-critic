@@ -36,6 +36,9 @@ sub run {
 		if( ! -e $SKIP_FILE ) {
 			( 0, "$SKIP_FILE exists", "found" );
 			}
+		elsif( -r $SKIP_FILE ) {
+			( 0, "$SKIP_FILE is readable: $!", "open" );
+			}
 		elsif( open $fh, '<:utf8', $SKIP_FILE ) {
 			my $has_it = 0;
 
@@ -47,11 +50,8 @@ sub run {
 
 			( $has_it, "$SKIP_FILE uses the default list", "has it" );
 			}
-		elsif( -r $SKIP_FILE ) {
-			( 0, "$SKIP_FILE is readable: $!", "open" );
-			}
 		else {
-			( 1, "$SKIP_FILE is good", "good" );
+			( 0, "$SKIP_FILE couldn't be opened: $!", "open" );
 			}
 		};
 
