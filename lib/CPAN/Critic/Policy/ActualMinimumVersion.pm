@@ -64,7 +64,7 @@ sub run {
 		my $p = Perl::MinimumVersion::Fast->new( $module );
 		my $syntax_v   = $p->minimum_syntax_version;
 		my $declared_v = $p->minimum_explicit_version;
-		say "$module -> $declared_v";
+
 		my $declared_v_default = $declared_v || version->new( '5.008' );
 
 		if( ! defined $declared_v ) {
