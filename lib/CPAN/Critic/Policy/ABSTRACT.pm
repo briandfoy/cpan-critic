@@ -29,7 +29,7 @@ CPAN::Critic::Policy::ABSTRACT - Every module has an abstract
 sub run {
 	my( $class, @args ) = @_;
 
-	my $rv = CPAN::Critic::Util::FindFiles->find_by_extension( 'pm' );
+	my $rv = CPAN::Critic::Util::FindFiles->get_module_files;
 	return $rv unless $rv->is_success;
 
 	my $files = $rv->value;
