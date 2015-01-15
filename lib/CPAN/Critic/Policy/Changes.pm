@@ -43,7 +43,7 @@ sub run {
     my @releases = $changes->releases;
 	return ReturnValue->error(
 		value       => 0,
-		description => "The Changes file has releases",
+		description => "The Changes file has at least one release",
 		policy      => __PACKAGE__,
 		) unless @releases;
 
