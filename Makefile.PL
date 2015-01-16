@@ -33,14 +33,19 @@ my %WriteMakefile = (
 
 	'PREREQ_PM'     => {
 		'CPAN::Changes'               => '0',
+		'Perl::MinimumVersion::Fast'  => '0',
+		'Module::Extract::Namespaces' => '0',
+		'ReturnValue'                 => '0',
+		'Compiler::Lexer'             => '0.11',
+
 		'Cwd'                         => '0',
 		'ExtUtils::MM_Unix'           => '0',
 		'File::Find'                  => '0',
 		'File::Spec::Functions'       => '0',
-		'Module::Extract::Namespaces' => '0',
-		'Perl::MinimumVersion::Fast'  => '0',
-		'ReturnValue'                 => '0',
-		'Compiler::Lexer'             => '0.11',
+		'parent'                      => '0',
+		'version'                     => '0',
+		'List::Util'                  => '0',
+		'Data::Dumper'                => '0',
 		},
 
 	'META_MERGE' => {
