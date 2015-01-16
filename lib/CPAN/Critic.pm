@@ -96,7 +96,7 @@ sub _load_default_policies {
 sub _find_policies {
 	my( $self ) = @_;
 
-	my @dirs = map {
+	my @dirs = grep { -d } map {
 		File::Spec->catfile( $_, qw(CPAN Critic Policy) )
 		} @INC;
 
