@@ -32,21 +32,17 @@ foreach my $dir ( @dirs ) {
 	my $rc = $critic->critique( $dir );
 
 	if( $rc->is_success ) {
+		# these are all the result objects from the policies
 		my $results = $rc->value;
 
 		foreach my $result ( $results->@* ) {
 			printf "%4s %s\n", $result->is_success ? $PASS : $FAIL, $result->policy;
 
-			unless( $result->is_success ) {
+			if( $result->is_error ) {
 				say "\tProblem: ";
-				my $value = $result->value;
-				unless( ref $value ) {
-					say "\t\t" . $result->description;
-					}
-				elsif( ref $value eq ref [] ) {
-					foreach my $r ( @$value	) {
-						say "\t\t" . $r->description;
-						}
+				my $problems = $result->value;
+				foreach my $problem ( $result->value->@* ) {
+					say "\t\t" . $problem->description;
 					}
 				}
 			}
