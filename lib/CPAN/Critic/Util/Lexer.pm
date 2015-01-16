@@ -89,4 +89,28 @@ sub is_use {
 sub is_num {
 	$_[0]->name eq 'Int' || $_[0]->name eq 'Double'
 	}
+
+=back
+
+=head1 TO DO
+
+
+=head1 SOURCE AVAILABILITY
+
+This code is in Github:
+
+	http://github.com/briandfoy/cpan-critic
+
+=head1 AUTHOR
+
+brian d foy, C<< <bdfoy@cpan.org> >>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright © 2014-2015, brian d foy <bdfoy@cpan.org>. All rights reserved.
+
+You may redistribute this under the same terms as Perl itself.
+
+=cut
+
 1;
