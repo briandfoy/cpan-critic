@@ -1,18 +1,9 @@
-use v5.20;
-use feature qw(postderef);
-no warnings qw();
-
 package CPAN::Critic;
-use strict;
+use v5.20;
 
-use warnings;
-no warnings;
-
-use subs qw();
-use vars qw($VERSION);
+use CPAN::Critic::Basics;
 
 use Cwd;
-use ReturnValue;
 use File::Find;
 use File::Spec::Functions qw(catfile splitdir);
 

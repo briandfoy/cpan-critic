@@ -1,10 +1,9 @@
 package CPAN::Critic::Util::Lexer;
 use 5.010;
-use strict;
-use warnings;
+
+use CPAN::Critic::Basics;
 
 use Compiler::Lexer 0.13;
-use ReturnValue;
 
 =encoding utf8
 

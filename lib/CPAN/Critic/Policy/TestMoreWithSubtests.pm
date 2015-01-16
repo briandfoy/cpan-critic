@@ -1,10 +1,7 @@
 package CPAN::Critic::Policy::TestMoreWithSubtests;
-use v5.10;
+use v5.20;
 
-use strict;
-use warnings;
-
-use ReturnValue;
+use CPAN::Critic::Basics;
 
 =encoding utf8
 

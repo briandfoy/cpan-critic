@@ -1,12 +1,9 @@
 package CPAN::Critic::Policy::ABSTRACT;
-use v5.10;
-use strict;
-use warnings;
+use v5.20;
 
-use ReturnValue;
+use CPAN::Critic::Basics;
+
 use ExtUtils::MM_Unix;
-use CPAN::Critic::Util;
-use CPAN::Critic::Util::FindFiles;
 
 =encoding utf8
 

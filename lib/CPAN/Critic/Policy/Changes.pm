@@ -1,12 +1,9 @@
 package CPAN::Critic::Policy::Changes;
 use v5.10;
 
-use strict;
-use warnings;
+use CPAN::Critic::Basics;
 
-use ReturnValue;
 use CPAN::Changes;
-use version;
 
 =encoding utf8
 

@@ -1,11 +1,7 @@
 package CPAN::Critic::Policy::DefaultManifestSkip;
 use v5.10;
 
-use strict;
-use warnings;
-
-use ReturnValue;
-use Cwd;
+use CPAN::Critic::Basics;
 
 =encoding utf8
 

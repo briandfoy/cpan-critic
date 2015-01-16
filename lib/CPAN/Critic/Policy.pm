@@ -1,6 +1,8 @@
 package CPAN::Critic::Policy;
 use 5.008;
 
+use CPAN::Critic::Basics;
+
 =encoding utf8
 
 =head1 NAME

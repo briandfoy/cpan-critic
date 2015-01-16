@@ -1,11 +1,9 @@
 package CPAN::Critic::Policy::ABSTRACT_FROM;
 use v5.10;
-use strict;
-use warnings;
 
-use ReturnValue;
+use CPAN::Critic::Basics;
+
 use ExtUtils::MM_Unix;
-use CPAN::Critic::Util::MakefilePL;
 
 =encoding utf8
 

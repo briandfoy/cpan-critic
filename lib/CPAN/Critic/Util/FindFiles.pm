@@ -1,7 +1,7 @@
 package CPAN::Critic::Util::FindFiles;
 use 5.008;
-use strict;
-use warnings;
+
+use CPAN::Critic::Basics;
 
 use File::Find qw(find);
 use File::Spec::Functions qw(canonpath);

@@ -1,7 +1,7 @@
 package CPAN::Critic::Util::MakefilePL;
 use 5.008;
-use strict;
-use warnings;
+
+use CPAN::Critic::Basics;
 
 use Cwd                   qw(getcwd);
 use File::Spec::Functions qw(rel2abs);

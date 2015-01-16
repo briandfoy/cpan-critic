@@ -1,10 +1,8 @@
 package CPAN::Critic::Policy::ActualMinimumVersion;
 use v5.10;
 
-use strict;
-use warnings;
+use CPAN::Critic::Basics;
 
-use ReturnValue;
 use Perl::MinimumVersion::Fast;
 
 =encoding utf8
