@@ -7,7 +7,7 @@ use Cwd;
 use File::Find;
 use File::Spec::Functions qw(catfile splitdir);
 
-$VERSION = '0.10_01';
+our $VERSION = '0.001_001';
 
 =encoding utf8
 
