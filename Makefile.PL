@@ -40,6 +40,7 @@ my %WriteMakefile = (
 		'Module::Extract::Namespaces' => '0',
 		'Perl::MinimumVersion::Fast'  => '0',
 		'ReturnValue'                 => '0',
+		'Compiler::Lexer'             => '0.11',
 		},
 
 	'META_MERGE' => {
