@@ -21,8 +21,11 @@ CPAN::Critic::Policy::BugTracker - The Makefile arguments specifies a bugtracker
 
 =cut
 
+my $FILE = 'Makefile.PL';
+
 sub run {
 	my( $class, @args ) = @_;
+	my @problems;
 
 	my $rv = CPAN::Critic::Util::MakefilePL->get_args;
 	return $rv unless $rv->is_success;
@@ -33,34 +36,37 @@ sub run {
 		$args->{META_MERGE}{resources}{bugtracker}{web}
 		};
 
-	my( $value, $description, $tag ) = do {
+	my( $value, $description ) = do {
 		if( ! exists $args->{META_MERGE} ) {
-			( 0, 'META_MERGE is in the data structure', 'found' );
+			( 0, 'META_MERGE is in the data structure' );
 			}
 		elsif( ! exists $args->{META_MERGE}{resources} ) {
-			( 0, 'META_MERGE/resources is in the data structure', 'found' );
+			( 0, 'META_MERGE/resources is in the data structure' );
 			}
 		elsif( ! exists $args->{META_MERGE}{resources}{bugtracker} ) {
-			( 0, 'META_MERGE/resources/bugtracker is in the data structure', 'found' );
+			( 0, 'META_MERGE/resources/bugtracker is in the data structure' );
 			}
 		elsif( ! $args->{META_MERGE}{resources}{bugtracker}{web} ) {
-			( 0, 'META_MERGE/resources/bugtracker/web file is there', 'found' );
+			( 0, 'META_MERGE/resources/bugtracker/web file is there' );
 			}
 		elsif( $url !~ m/issues/ ) {
-			( 0, "bugtracker has /issues, literally", '???' );
+			( 0, "bugtracker has /issues, literally" );
 			}
 		else {
-			( $url, 'The bugtracker is there', '???' );
+			( $url, 'The bugtracker is there' );
 			}
 		};
 
-	my $method = $value ? 'success' : 'error';
+	push @problems, CPAN::Critic::Problem->new(
+		description => $description,
+		file        => $FILE,
+		) unless $value;
+
+	my $method = @problems ? 'error' : 'success';
 
 	ReturnValue->$method(
-		value       => $value,
-		description => $description,
-		tag         => $tag,
-		policy      => __PACKAGE__,
+		value       => \@problems,
+		policy      => $class,
 		);
 	}
 

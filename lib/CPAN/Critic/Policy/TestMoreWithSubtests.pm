@@ -23,20 +23,22 @@ CPAN::Critic::Policy::TestMoreWithSubtests - Check that tests use subtests
 
 sub run {
 	my( $class, @args ) = @_;
+	my @problems;
 
-	my( $value, $description, $tag ) = (
-		1,
-		'Null',
-		'null'
-		);
+	my $files = CPAN::Critic::Util::FindFiles->get_test_files->value;
 
-	my $method = $value ? 'success' : 'error';
+	foreach my $file ( $files->@* ) {
+		push @problems, CPAN::Critic::Problem->new(
+			description => "Test file ($file) uses subtests",
+			file        => $file,
+			) unless 1;
+		}
+
+	my $method = @problems ? 'error' : 'success';
 
 	ReturnValue->$method(
-		value       => $value,
-		description => $description,
-		tag         => $tag,
-		policy      => __PACKAGE__,
+		value       => \@problems,
+		policy      => $class,
 		);
 	}
 

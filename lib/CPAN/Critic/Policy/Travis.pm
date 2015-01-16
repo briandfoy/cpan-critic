@@ -23,31 +23,33 @@ my $FILE = '.travis.yml';
 
 sub run {
 	my( $class, @args ) = @_;
+	my @problems;
 
-	my $fh;
-
-	my( $value, $description, $tag ) = do {
+	my( $value, $description ) = do {
 		if( ! -e $FILE ) {
-			( 0, "$FILE exists", "found" );
+			( 0, "$FILE exists" );
 			}
 		elsif( ! -r $FILE ) {
-			( 0, "$FILE is readable", "open" );
+			( 0, "$FILE is readable" );
 			}
 		elsif( ! -s $FILE ) {
-			( 0, "$FILE has non-zero size", "size" );
+			( 0, "$FILE has non-zero size" );
 			}
 		else {
-			( 1, "$FILE is good", 'good' );
+			( 1, "$FILE is good" );
 			}
 		};
 
-	my $method = $value ? 'success' : 'error';
+	push @problems, CPAN::Critic::Problem->new(
+		description => $description,
+		file        => $FILE,
+		) unless $value;
+	
+	my $method = @problems ? 'error' : 'success';
 
 	ReturnValue->$method(
-		value       => $value,
-		description => $description,
-		tag         => $tag,
-		policy      => __PACKAGE__,
+		value    => \@problems,
+		policy   => $class,
 		);
 	}
 

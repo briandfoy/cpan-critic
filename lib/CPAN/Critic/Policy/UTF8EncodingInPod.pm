@@ -39,13 +39,13 @@ sub run {
 		LINE: while( <$fh> ) {
 			next LINE unless /\A=(\S+)\s+(\S+)/;
 			my( $directive, $encoding ) = ( $1, $2 );
-			push @problems, ReturnValue->error(
+			push @problems, CPAN::Critic::Problem->new(
 				value       => 0,
 				description => "=encoding isn't the first pod directive in ($file)",
 				policy      => __PACKAGE__,
 				) unless $directive eq 'encoding';
 
-			push @problems, ReturnValue->error(
+			push @problems, CPAN::Critic::Problem->new(
 				value       => 0,
 				description => "=encoding isn't UTF-8 in ($file)",
 				policy      => __PACKAGE__,
@@ -54,7 +54,7 @@ sub run {
 			next FILE;
 			}
 	
-		push @problems, ReturnValue->error(
+		push @problems, CPAN::Critic::Problem->new(
 			value       => 0,
 			description => "No pod in ($file)",
 			policy      => __PACKAGE__,

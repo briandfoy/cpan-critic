@@ -23,6 +23,7 @@ CPAN::Critic::Policy::MIN_PERL_VERSION - Check that the declared minimum version
 
 sub run {
 	my( $class, @args ) = @_;
+	my @problems;
 
 	my $rv = CPAN::Critic::Util::MakefilePL->check_if_modulino();
 	return $rv unless $rv->is_success;
@@ -31,22 +32,20 @@ sub run {
 
 	no warnings 'uninitialized';
 
-	my( $value, $description, $tag ) = do {
+	my( $value, $description ) = do {
 		if( ! exists $args->{MIN_PERL_VERSION} ) {
-			( 0, 'MIN_PERL_VERSION is in the data structure', 'found' );
+			( 0, 'MIN_PERL_VERSION is in the data structure' );
 			}
 		else {
-			( $args->{MIN_PERL_VERSION}, 'The minimum version is there', '???' );
+			( $args->{MIN_PERL_VERSION}, 'The minimum version is there' );
 			}
 		};
 
-	my $method = $value ? 'success' : 'error';
+	my $method = @problems ? 'error' : 'success';
 
 	ReturnValue->$method(
-		value       => $value,
-		description => $description,
-		tag         => $tag,
-		policy      => __PACKAGE__,
+		value       => \@problems,
+		policy      => $class,
 		);
 	}
 

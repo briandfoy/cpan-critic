@@ -25,20 +25,18 @@ CPAN::Critic::Policy::ABSTRACT - Every module has an abstract
 
 sub run {
 	my( $class, @args ) = @_;
+	my @problems;
 
 	my $rv = CPAN::Critic::Util::FindFiles->get_module_files;
 	return $rv unless $rv->is_success;
 
 	my $files = $rv->value;
 
-	my @results;
-	my $errors;
-
 	FILE: foreach my $file ( @$files ) {
 		my $rv = CPAN::Critic::Util->extract_package( $file );
 
 		if( $rv->is_error ) {
-			push @results, $rv;
+			push @problems, $rv->value->@*;
 			next FILE;
 			}
 
@@ -51,43 +49,36 @@ sub run {
 			$object->parse_abstract( $file )
 			};
 
-		my( $value, $description, $tag ) = do {
+		my( $value, $description ) = do {
 			if( ! -e $file ) {
-				( 0, "$file file is there", 'found' );
+				( 0, "$file file is there" );
 				}
 			elsif( ! -r $file ) {
-				( 0, "$file file is readable", 'readable' );
+				( 0, "$file file is readable" );
 				}
 			elsif( ! $abstract ) {
-				( 0, "$file has an abstract", '???' );
+				( 0, "$file has an abstract" );
 				}
 			elsif( $abstract =~ m/This/ ) {
-				( 0, "Abstract doesn't have boilerplate", '???' );
+				( 0, "Abstract doesn't have boilerplate" );
 				}
 			else {
-				( $abstract, "The abstract is okay in $file", '???' );
+				( $abstract, "The abstract is okay in $file" );
 				}
 			};
 
-		my $method = $value ? 'success' : 'error';
-
-		push @results, 	ReturnValue->$method(
-			value       => $value,
+		push @problems, CPAN::Critic::Problem->new(
 			description => $description,
-			tag         => $tag,
 			file        => $file,
-			policy      => __PACKAGE__,
-			);
-
-		$errors++ if $results[-1]->is_error;
+			) unless $value;
 		}
 
-	my $method = $errors ? 'error' : 'success';
+	my $method = @problems ? 'error' : 'success';
 
 	ReturnValue->$method(
-		value       => \@results,
+		value       => \@problems,
 		description => 'Some files had abstract errors',
-		policy      => __PACKAGE__,
+		policy      => $class,
 		);
 	}
 

@@ -28,13 +28,16 @@ my %Ignores = map { $_, 1 } qw(
 	feature
 	);
 
+my $FILE = 'Makefile.PL';
+
 sub run {
 	my( $class, @args ) = @_;
+	my @problems;
 
 	my $files = CPAN::Critic::Util::FindFiles->get_module_files->value;
 
 	my %found;
-	foreach my $file ( @$files ) {
+	foreach my $file ( $files->@* ) {
 		my $namespaces = CPAN::Critic::Util::Lexer->get_namespaces( $file )->value;
 		foreach my $elem ( @$namespaces ) {
 			next unless defined $elem->[0];
@@ -58,22 +61,19 @@ sub run {
 		$prereqs->{$key} = version->new( $prereqs->{$key} );
 		}
 
-	my @problems;
 	foreach my $key ( keys %found ) {
 		my $version = $found{$key} // 0;
 
 		if( ! exists $prereqs->{$key} ) {
-			push @problems, ReturnValue->error(
-				value       => 0,
+			push @problems, CPAN::Critic::Problem->new(
 				description => "Missing module in prereqs ($key)",
 				namespace   => $key,
 				);
 			}
 		elsif( $prereqs->{$key} < $found{$key} ) {
-			push @problems, ReturnValue->error(
-				value       => 0,
-				description => "Prereq version ($prereqs->{$key}) of module ($key) is less than declared version ($found{$key})",
-				namespace   => $key,
+			push @problems, CPAN::Critic::Problem->new(
+				description      => "Prereq version ($prereqs->{$key}) of module ($key) is less than declared version ($found{$key})",
+				namespace        => $key,
 				declared_version => $prereqs->{$key},
 				required_version => $found{$key},
 				);
@@ -85,7 +85,7 @@ sub run {
 	ReturnValue->$method(
 		value       => \@problems,
 		description => 'Required modules match declared prereqs',
-		policy      => __PACKAGE__,
+		policy      => $class,
 		);
 	}
 

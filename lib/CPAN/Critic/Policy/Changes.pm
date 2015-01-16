@@ -27,35 +27,43 @@ my $FILE = 'Changes';
 
 sub run {
 	my( $class, @args ) = @_;
+	my @problems;
 
     my $changes = eval { CPAN::Changes->load( $FILE ) };
 	my $at = $@;
 
-	return ReturnValue->error(
-		value  => $at,
-		description => "Parsed the Changes file",
-		policy => __PACKAGE__,
-		) if $at;
+	if( $at ) {
+		push @problems, CPAN::Critic::Problem->new(
+			value       => $at,
+			description => "Parsed the Changes file",
+			);
+
+		return ReturnValue->error(
+			value  => \@problems,
+			policy => $class,
+			);
+		}
 
     my @releases = $changes->releases;
-	return ReturnValue->error(
-		value       => 0,
+	push @problems, CPAN::Critic::Problem->new(
 		description => "The Changes file has at least one release",
-		policy      => __PACKAGE__,
 		) unless @releases;
+	return ReturnValue->error(
+		value  => \@problems,
+		policy => $class,
+		) if @problems;
+	
 
-	my @results;
     foreach my $release ( @releases ) {
         if ( !defined $release->date || $_->release eq ''  ) {
-			push @results, ReturnValue->error(
-				value       => 0,
+			push @problems, CPAN::Critic::Problem->new(
 				description => "No date for version " . $release->version,
+				version     => $release->version,
 				);
         	}
 
 		unless( $release->{_parsed_date} =~ m/\A${CPAN::Changes::W3CDTF_REGEX}\z/ ) {
-			push @results, ReturnValue->error(
-				value       => 0,
+			push @problems, CPAN::Critic::Problem->new(
 				description => "The date for version " . $release->version . " is the right format",
 				parsed_date => $release->{_parsed_date},
 				);
@@ -64,18 +72,17 @@ sub run {
         # strip off -TRIAL before testing
         (my $version = $release->version) =~ s/-TRIAL$//;
         if( not version::is_lax($version) ) {
-			push @results, ReturnValue->error(
-				value       => 0,
+			push @problems, CPAN::Critic::Problem->new(
 				description => "The version is the right format",
 				version     => $version,
 				);
 			}
         }
 
-	my $method = @results ? 'error' : 'success';
+	my $method = @problems ? 'error' : 'success';
 
 	ReturnValue->$method(
-		value  => \@results,
+		value  => \@problems,
 		policy => $class,
 		);
     }

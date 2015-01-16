@@ -27,6 +27,7 @@ my $FILE = 'Makefile.PL';
 
 sub run {
 	my( $class, @args ) = @_;
+	my @problems;
 
 	my $rv = CPAN::Critic::Util::MakefilePL->get_args();
 	return $rv unless $rv->is_success;
@@ -42,34 +43,38 @@ sub run {
 		$object->parse_abstract( $args->{ABSTRACT_FROM} )
 		};
 
-	my( $value, $description, $tag ) = do {
+	my( $value, $description ) = do {
 		if( ! exists $args->{ABSTRACT_FROM} ) {
-			( 0, 'ABSTRACT_FROM is in the data structure', 'found' );
+			( 0, 'ABSTRACT_FROM is in the data structure' );
 			}
 		elsif( ! -e $args->{ABSTRACT_FROM} ) {
-			( 0, 'ABSTRACT_FROM file is there', 'found' );
+			( 0, 'ABSTRACT_FROM file is there' );
 			}
 		elsif( ! -r $args->{ABSTRACT_FROM} ) {
-			( 0, 'ABSTRACT_FROM file is readable', 'found' );
+			( 0, 'ABSTRACT_FROM file is readable' );
 			}
 		elsif( ! $abstract ) {
-			( 0, 'ABSTRACT_FROM is there', '???' );
+			( 0, 'ABSTRACT_FROM is there' );
 			}
 		elsif( $abstract =~ m/This/ ) {
-			( 0, "ABSTRACT_FROM doesn't have boilerplate", '???' );
+			( 0, "ABSTRACT_FROM doesn't have boilerplate" );
 			}
 		else {
-			( $abstract, 'The abstract is okay', '???' );
+			( $abstract, 'The abstract is okay' );
 			}
 		};
 
-	my $method = $value ? 'success' : 'error';
-
-	ReturnValue->$method(
+	push @problems, CPAN::Critic::Problem->new(
 		value       => $value,
 		description => $description,
-		tag         => $tag,
-		policy      => __PACKAGE__,
+		file        => $FILE,
+		) unless $value;
+
+	my $method = @problems ? 'error' : 'success';
+
+	ReturnValue->$method(
+		value       => \@problems,
+		policy      => $class,
 		);
 	}
 

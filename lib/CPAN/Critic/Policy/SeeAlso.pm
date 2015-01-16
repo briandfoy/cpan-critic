@@ -23,20 +23,19 @@ CPAN::Critic::Policy::SeeAlso - Check for SEE ALSO, somewhere
 
 sub run {
 	my( $class, @args ) = @_;
+	my @problems;
 
-	my( $value, $description, $tag ) = (
+	my( $value, $description ) = (
 		1,
 		'Null',
-		'null'
 		);
 
-	my $method = $value ? 'success' : 'error';
+	my $method = @problems ? 'error' : 'success';
 
 	ReturnValue->$method(
-		value       => $value,
+		value       => \@problems,
 		description => $description,
-		tag         => $tag,
-		policy      => __PACKAGE__,
+		policy      => $class,
 		);
 	}
 

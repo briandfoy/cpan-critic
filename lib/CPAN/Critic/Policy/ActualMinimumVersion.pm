@@ -47,6 +47,7 @@ sub Perl::MinimumVersion::Fast::_build_minimum_explicit_version {
 
 sub run {
 	my( $class, @args ) = @_;
+	my @problems;
 
 	my $rv = CPAN::Critic::Util::MakefilePL->get_args;
 	return $rv unless $rv->is_success;
@@ -55,7 +56,6 @@ sub run {
 
 	my $modules = CPAN::Critic::Util::FindFiles->get_module_files->value;
 
-	my @results;
 	my @syntax_versions;
 	foreach my $module ( sort @$modules ) {
 		no warnings 'uninitialized';
@@ -69,7 +69,7 @@ sub run {
 		my $declared_v_default = $declared_v || version->new( '5.008' );
 
 		if( ! defined $declared_v ) {
-			push @results, ReturnValue->error(
+			push @problems, CPAN::Critic::Problem->new(
 				value            => 0,
 				description      => "$module has no declared minimum perl version",
 				syntax_version   => $syntax_v,
@@ -77,7 +77,7 @@ sub run {
 			}
 
 		if( $declared_v && $syntax_v > $declared_v_default ) {
-			push @results, ReturnValue->error(
+			push @problems, CPAN::Critic::Problem->new(
 				value            => 0,
 				description      => "$module declared perl version is too low! Declared: $declared_v < $syntax_v\n",
 				declared_version => $declared_v,
@@ -86,13 +86,13 @@ sub run {
 			}
 
 		unless( exists $args->{MIN_PERL_VERSION} ) {
-			push @results, ReturnValue->error(
+			push @problems, CPAN::Critic::Problem->new(
 				value            => 0,
 				description      => "The build file doesn't specify MIN_PERL_VERSION",
 				);
 			}
 		elsif( version->new( $args->{MIN_PERL_VERSION} ) < $syntax_v ) {
-			push @results, ReturnValue->error(
+			push @problems, CPAN::Critic::Problem->new(
 				value            => 0,
 				description      => "The build file MIN_PERL_VERSION is less than the syntax perl version",
 				declared_version => $args->{MIN_PERL_VERSION},
@@ -105,19 +105,18 @@ sub run {
 	my $max_syntax_version = max( @syntax_versions );
 
 	if( version->new( $args->{MIN_PERL_VERSION} ) > $max_syntax_version ) {
-		push @results, ReturnValue->error(
-			value            => 0,
+		push @problems, CPAN::Critic::Problem->new(
 			description      => "The build file MIN_PERL_VERSION [$args->{MIN_PERL_VERSION}] is greater than the maximum syntax perl version [$max_syntax_version]",
 			declared_version => $args->{MIN_PERL_VERSION},
 			syntax_version   => $max_syntax_version,
 			);
 		}
 
-	my $method = @results ? 'error' : 'success';
+	my $method = @problems ? 'error' : 'success';
 
 	ReturnValue->$method(
-		value  => \@results,
-		policy => __PACKAGE__,
+		value  => \@problems,
+		policy      => $class,
 		);
 	}
 

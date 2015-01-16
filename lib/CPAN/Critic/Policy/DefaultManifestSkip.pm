@@ -21,21 +21,22 @@ CPAN::Critic::Policy::DefaultManifestSkip - Check MANIFEST.SKIP uses the default
 
 =cut
 
-my $SKIP_FILE = 'MANIFEST.SKIP';
+my $FILE = 'MANIFEST.SKIP';
 
 sub run {
 	my( $class, @args ) = @_;
+	my @problems;
 
 	my $fh;
 
-	my( $value, $description, $tag ) = do {
-		if( ! -e $SKIP_FILE ) {
-			( 0, "$SKIP_FILE exists", "found" );
+	my( $value, $description ) = do {
+		if( ! -e $FILE ) {
+			( 0, "$FILE exists" );
 			}
-		elsif( ! -r $SKIP_FILE ) {
-			( 0, "$SKIP_FILE is readable: $!", "open" );
+		elsif( ! -r $FILE ) {
+			( 0, "$FILE is readable: $!" );
 			}
-		elsif( open $fh, '<:utf8', $SKIP_FILE ) {
+		elsif( open $fh, '<:utf8', $FILE ) {
 			my $has_it = 0;
 
 			while( <$fh> ) {
@@ -44,20 +45,23 @@ sub run {
 				last;
 				}
 
-			( $has_it, "$SKIP_FILE uses the default list", "has it" );
+			( $has_it, "$FILE uses the default list" );
 			}
 		else {
-			( 0, "$SKIP_FILE couldn't be opened: $!", "open" );
+			( 0, "$FILE couldn't be opened: $!" );
 			}
 		};
 
-	my $method = $value ? 'success' : 'error';
+	push @problems, CPAN::Critic::Problem->new(
+		description => $description,
+		file        => $FILE,
+		) unless $value;
+
+	my $method = @problems ? 'error' : 'success';
 
 	ReturnValue->$method(
-		value       => $value,
-		description => $description,
-		tag         => $tag,
-		policy      => __PACKAGE__,
+		value       => \@problems,
+		policy      => $class,
 		);
 	}
 
