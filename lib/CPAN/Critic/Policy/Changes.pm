@@ -33,13 +33,13 @@ sub run {
 
     my $changes = eval { CPAN::Changes->load( $FILE ) };
 	my $at = $@;
-	
+
 	return ReturnValue->error(
 		value  => $at,
 		description => "Parsed the Changes file",
 		policy => __PACKAGE__,
 		) if $at;
-        	
+
     my @releases = $changes->releases;
 	return ReturnValue->error(
 		value       => 0,
@@ -63,7 +63,7 @@ sub run {
 				parsed_date => $release->{_parsed_date},
 				);
 			}
-		
+
         # strip off -TRIAL before testing
         (my $version = $release->version) =~ s/-TRIAL$//;
         if( not version::is_lax($version) ) {

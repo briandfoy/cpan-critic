@@ -36,10 +36,10 @@ sub run {
 
 	my @results;
 	my $errors;
-	
+
 	FILE: foreach my $file ( @$files ) {
 		my $rv = CPAN::Critic::Util->extract_package( $file );
-		
+
 		if( $rv->is_error ) {
 			push @results, $rv;
 			next FILE;
@@ -71,9 +71,9 @@ sub run {
 				( $abstract, "The abstract is okay in $file", '???' );
 				}
 			};
-			
+
 		my $method = $value ? 'success' : 'error';
-		
+
 		push @results, 	ReturnValue->$method(
 			value       => $value,
 			description => $description,
@@ -81,17 +81,17 @@ sub run {
 			file        => $file,
 			policy      => __PACKAGE__,
 			);
-			
+
 		$errors++ if $results[-1]->is_error;
 		}
 
 	my $method = $errors ? 'error' : 'success';
-	
+
 	ReturnValue->$method(
 		value       => \@results,
 		description => 'Some files had abstract errors',
 		policy      => __PACKAGE__,
-		);	
+		);
 	}
 
 __PACKAGE__;

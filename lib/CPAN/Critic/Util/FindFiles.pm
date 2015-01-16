@@ -36,8 +36,8 @@ sub find_by_name {
 	my( $policy ) = ( caller(1) )[0];
 
 	my @files;
-	my $wanted = sub { 
-		push @files, canonpath( $File::Find::name ) if exists $names{$_} 
+	my $wanted = sub {
+		push @files, canonpath( $File::Find::name ) if exists $names{$_}
 		};
 
 	find( $wanted, '.' );
@@ -56,8 +56,8 @@ sub find_by_extension {
 	my $wanted = sub {
 		no warnings 'uninitialized';
 		my( $extension ) = /\.([^.]+)\z/;
-		push @files, canonpath( $File::Find::name ) 
-			if exists $extensions{$extension}; 
+		push @files, canonpath( $File::Find::name )
+			if exists $extensions{$extension};
 		};
 
 	find( $wanted, '.' );

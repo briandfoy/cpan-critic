@@ -40,7 +40,7 @@ sub check_if_modulino {
 	$FILE = $arg if $arg;
 
 	my $path = rel2abs( $FILE, getcwd );
-	
+
 	unless( -e $path ) {
 		return ReturnValue->error(
 			value      => 0,

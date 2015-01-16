@@ -36,16 +36,16 @@ sub run {
 	my( $class, @args ) = @_;
 
 	my $files = CPAN::Critic::Util::FindFiles->get_module_files->value;
-	
+
 	my %found;
 	foreach my $file ( @$files ) {
 		my $namespaces = CPAN::Critic::Util::Lexer->get_namespaces( $file )->value;
 		foreach my $elem ( @$namespaces ) {
 			next unless defined $elem->[0];
 			my( $namespace, $version ) = @$elem;
-			
+
 			my $previous_max = $found{ $namespace } // 0;
-			
+
 			my $max_version = max( $previous_max, version->new( $version ) );
 			$found{ $namespace } = $max_version;
 			}
@@ -65,13 +65,13 @@ sub run {
 	my @problems;
 	foreach my $key ( keys %found ) {
 		my $version = $found{$key} // 0;
-		
+
 		if( ! exists $prereqs->{$key} ) {
 			push @problems, ReturnValue->error(
 				value       => 0,
 				description => "Missing module in prereqs ($key)",
 				namespace   => $key,
-				); 
+				);
 			}
 		elsif( $prereqs->{$key} < $found{$key} ) {
 			push @problems, ReturnValue->error(
@@ -80,7 +80,7 @@ sub run {
 				namespace   => $key,
 				declared_version => $prereqs->{$key},
 				required_version => $found{$key},
-				); 
+				);
 			}
 		}
 

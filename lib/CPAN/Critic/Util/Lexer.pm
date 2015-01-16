@@ -41,16 +41,16 @@ sub get_namespaces {
 		while( ++$j ) {
 			my $name = $tokens->[$j]->name;
 			$namespace .= $tokens->[$j]->data if(
-				$name eq 'UsedName' || 
+				$name eq 'UsedName' ||
 				$name eq 'Namespace' || $name eq 'NamespaceResolver'
 				);
-		
+
 			$version = $tokens->[$j]->data if is_num( $tokens->[$j] );
 			last if $tokens->[$j]->name eq 'SemiColon'
 			}
-	
+
 		push @found, [ $namespace, $version ];
-	
+
 		$i = $j;
 		}
 
@@ -58,11 +58,11 @@ sub get_namespaces {
 		value => \@found,
 		);
 	}
-	
 
-sub tokenize {	
+
+sub tokenize {
 	my( $class, $file ) = @_;
-	
+
 	my $source = do { local( @ARGV, $/ ) = $file; <> };
 
     my $lexer = Compiler::Lexer->new( $file );
@@ -70,11 +70,11 @@ sub tokenize {
 	}
 
 
-=pod 
+=pod
 
 PATTERNS
 
-UseDecl Namespace (NamespaceResolver Namespace)+ (Double)+ 
+UseDecl Namespace (NamespaceResolver Namespace)+ (Double)+
 	RegList RegDelim RegExp+ RegDelim
 	LeftParenthesis RawString (Comma RawString)+ RightParenthesis
 

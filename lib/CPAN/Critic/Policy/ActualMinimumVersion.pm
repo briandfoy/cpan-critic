@@ -77,7 +77,7 @@ sub run {
 				syntax_version   => $syntax_v,
 				);
 			}
- 
+
 		if( $declared_v && $syntax_v > $declared_v_default ) {
 			push @results, ReturnValue->error(
 				value            => 0,
@@ -101,7 +101,7 @@ sub run {
 				syntax_version   => $syntax_v,
 				);
 			}
-			
+
 		}
 
 	my $max_syntax_version = max( @syntax_versions );

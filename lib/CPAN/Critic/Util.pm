@@ -26,7 +26,7 @@ CPAN::Critic::Util - Stuff you need in the other parts
 =cut
 
 sub extract_package {
-	my( $class, $filename ) = @_;	
+	my( $class, $filename ) = @_;
 
 	unless( -e $filename ) {
 		return ReturnValue->error(
