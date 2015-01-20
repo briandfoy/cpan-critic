@@ -3,6 +3,7 @@ use v5.20;
 
 use CPAN::Critic::Basics;
 
+use Config::Tiny;
 use Cwd;
 use File::Find;
 use File::Spec::Functions qw(catfile splitdir);
@@ -39,7 +40,9 @@ sub new {
 sub _init {
 	my( $self, %args ) = @_;
 
-	# $args{config} //= $self->_default_config;
+	if( $self->config_file_exists ) {
+		$self->{config} = $self->load_config;
+		}
 
 	my $result = $self->_load_default_policies;
 	if( $result->is_error ) {
@@ -51,15 +54,29 @@ sub _init {
 	my @namespaces = keys %namespaces;
 
 	$self->{config}{policies} = \@namespaces;
-	# $self->config( $self->_load_config );
-
-	# remove policies by config
 
 	$self;
 	}
 
-sub _default_config {
-	'cpan-critic.ini'
+sub _default_config    { 'cpan-critic.ini' }
+
+sub config_file_exists { -e $_[0]->_default_config }
+
+sub load_config {
+	my( $self ) = @_;
+
+	my $file = $self->_default_config;
+
+	my $config = Config::Tiny->new->read( $file );
+	}
+
+sub disabled_policies {
+	my( $self ) = @_;
+
+	my @sections = grep {
+		s/\A\s*-//
+		}
+		keys $self->config->%*;
 	}
 
 sub _load_default_policies {
