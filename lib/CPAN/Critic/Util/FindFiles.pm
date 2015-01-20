@@ -32,6 +32,13 @@ sub get_all_pod_files    { $_[0]->find_by_extension( qw(pod pm pl PL) ) }
 
 sub get_test_files       { $_[0]->find_by_extension( 't' ) }
 
+sub get_build_files      {
+	my @files = grep { -e $_ } qw( Makefile.PL Build.PL );
+	ReturnValue->success(
+		value => \@files,
+		);
+	}
+
 sub find_by_name {
 	my( $class, @names ) = @_;
 	my %names = map { $_, 1 } @names;
