@@ -29,9 +29,9 @@ my %Ignores = map { $_, 1 } qw(
 
 sub provides {
 	state $namespaces = [];
-	
+
 	return $namespaces if @$namespaces;
-	
+
 	my $files = CPAN::Critic::Util::FindFiles->get_module_files->value;
 
 	$namespaces = [
@@ -40,12 +40,12 @@ sub provides {
 			my @dirs = File::Spec->splitdir( $_ );
 			shift @dirs while $dirs[0] =~ /\A(\.|lib)\b/;
 			join '::', @dirs;
-			}	
+			}
 		$files->@*
 		];
 
 	# say "Provides: @$namespaces";
-	
+
 	$namespaces;
 	}
 
@@ -53,7 +53,7 @@ sub _run {
 	my( $class ) = @_;
 	my $MM_key      = $class->MM_key;
 	my $find_method = $class->find_method;
-	
+
 	my @problems;
 
 	my $files = CPAN::Critic::Util::FindFiles->$find_method()->value;

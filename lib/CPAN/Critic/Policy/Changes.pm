@@ -52,7 +52,7 @@ sub run {
 		value  => \@problems,
 		policy => $class,
 		) if @problems;
-	
+
 
     foreach my $release ( @releases ) {
         if ( !defined $release->date || $_->release eq ''  ) {

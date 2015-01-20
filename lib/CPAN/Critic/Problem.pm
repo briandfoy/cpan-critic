@@ -25,7 +25,7 @@ CPAN::Critic::Problem - represents something you need to fix
 
 sub new {
 	my( $class, %args ) = @_;
-	
+
 	$args{policy} //= (caller(1))[0];
 
 	bless \%args, $class;

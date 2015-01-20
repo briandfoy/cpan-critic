@@ -31,7 +31,7 @@ sub run {
 	FILE: foreach my $file ( @$pod_files ) {
 		open my $fh, '<:utf8', $file;
 		my $in_pod;
-		
+
 		# the encoding should be the first pod directive
 		LINE: while( <$fh> ) {
 			next LINE unless /\A=(\S+)\s+(\S+)/;
@@ -47,19 +47,19 @@ sub run {
 				description => "=encoding isn't UTF-8 in ($file)",
 				policy      => __PACKAGE__,
 				) unless $encoding eq 'utf8';
-				
+
 			next FILE;
 			}
-	
+
 		push @problems, CPAN::Critic::Problem->new(
 			value       => 0,
 			description => "No pod in ($file)",
 			policy      => __PACKAGE__,
 			);
 		}
-	
+
 	my $method = @problems ? 'error' : 'success';
-	
+
 	ReturnValue->$method(
 		value       => \@problems,
 		policy      => __PACKAGE__,
