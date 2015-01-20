@@ -28,7 +28,8 @@ my %WriteMakefile = (
 		},
 
 	'TEST_REQUIRES' => {
-		'Test::More' => '0.94',
+		'Test::More'                  => '0.94',
+		'File::Spec::Functions'       => '0',
 		},
 
 	'PREREQ_PM'     => {
