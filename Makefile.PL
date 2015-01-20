@@ -22,13 +22,14 @@ my %WriteMakefile = (
 	'CONFIGURE_REQUIRES' => {
 		'ExtUtils::MakeMaker'   => '6.64',
 		'File::Spec::Functions' => '0',
+		'File::Spec'            => '0',
 		},
 
 	'BUILD_REQUIRES' => {
 		},
 
 	'TEST_REQUIRES' => {
-		'Test::More'                  => '0.94',
+		'Test::More'                  => '0.95',
 		'File::Spec::Functions'       => '0',
 		},
 
@@ -37,7 +38,8 @@ my %WriteMakefile = (
 		'Perl::MinimumVersion::Fast'  => '0',
 		'Module::Extract::Namespaces' => '0',
 		'ReturnValue'                 => '0',
-		'Compiler::Lexer'             => '0.11',
+		'Compiler::Lexer'             => '0.13',
+		'Import::Into'                => '0',
 
 		'Cwd'                         => '0',
 		'ExtUtils::MM_Unix'           => '0',
