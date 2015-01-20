@@ -2,7 +2,6 @@ package CPAN::Critic::Problem;
 use 5.010;
 use parent qw(Hash::AsObject);
 
-
 use CPAN::Critic::Basics;
 
 =encoding utf8
