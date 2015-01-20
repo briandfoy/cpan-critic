@@ -11,7 +11,7 @@ my $github    = 'https://github.com/briandfoy/CPAN-Critic';
 my $main_file = catfile( 'lib', split /::/, "$module.pm" );
 
 my %WriteMakefile = (
-	'MIN_PERL_VERSION' => '5.012',
+	'MIN_PERL_VERSION' => '5.020',
 
 	'NAME'	        => $module,
 	'ABSTRACT_FROM' => $main_file,
