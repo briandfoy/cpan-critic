@@ -109,15 +109,21 @@ sub _find_policies {
 				};
 		find( $wanted, $dir );
 
-		push @namespaces, map {
-			my $rel = File::Spec->abs2rel( $_, $dir );
-			$rel =~ s/\.pm\z//;
-			my @parts = splitdir( $rel );
-			join '::', qw(CPAN Critic Policy), @parts;
-			} @files;
+		push @namespaces,
+			grep {
+				eval "use $_; 1"
+					&&
+				$_->can( 'run' );
+				}
+			map {
+				my $rel = File::Spec->abs2rel( $_, $dir );
+				$rel =~ s/\.pm\z//;
+				my @parts = splitdir( $rel );
+				join '::', qw(CPAN Critic Policy), @parts;
+				}
+			@files;
 		#say join "\n\t", "Found", @files;
 		}
-
 
 	@namespaces;
 	}
