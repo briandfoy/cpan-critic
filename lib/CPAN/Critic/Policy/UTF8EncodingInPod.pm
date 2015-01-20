@@ -1,9 +1,6 @@
 package CPAN::Critic::Policy::UTF8EncodingInPod;
 use v5.10;
 
-use strict;
-use warnings;
-
 use ReturnValue;
 
 =encoding utf8

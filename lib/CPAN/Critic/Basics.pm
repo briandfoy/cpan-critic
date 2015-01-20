@@ -11,11 +11,11 @@ use CPAN::Critic::Util;
 use CPAN::Critic::Util::FindFiles;
 use CPAN::Critic::Util::MakefilePL;
 
-use version;
-use Data::Dumper qw(Dumper);
-use List::Util;
+use version      ();
+use Data::Dumper ();
+use List::Util   ();
 
-use ReturnValue;
+use ReturnValue  ();
 
 =encoding utf8
 
@@ -35,20 +35,21 @@ CPAN::Critic::Basics - Things everyone needs
 
 =cut
 
+use Import::Into;
+
 sub import {
-	warnings->import;
-	warning->unimport( qw(
+	my $target = caller;
+
+	strict->import::into( $target );
+	feature->import::into( $target, ':5.20', 'postderef' );
+
+	warnings->import::into( $target );
+	warnings->unimport::out_of( qw(
 		experimental::postderef
 		) );
-	List::Util->import( 'max' );
-	strict->import;
-	feature->import( ':5.20', 'postderef' );
-	}
 
-sub unimport {
-    warnings->unimport;
-    strict->unimport;
-    feature->unimport;
+	List::Util->import::into( $target, 'max' );
+	Data::Dumper->import::into( $target, 'Dumper' );
 	}
 
 =back

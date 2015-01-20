@@ -3,8 +3,6 @@ use v5.20;
 
 use CPAN::Critic::Basics;
 
-use List::Util qw(max);
-
 =encoding utf8
 
 =head1 NAME

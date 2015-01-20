@@ -4,8 +4,6 @@ use parent qw(CPAN::Critic::Policy::ExplicitModules);
 
 use CPAN::Critic::Basics;
 
-use List::Util qw(max);
-
 =encoding utf8
 
 =head1 NAME
