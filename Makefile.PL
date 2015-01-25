@@ -38,7 +38,7 @@ my %WriteMakefile = (
 		'Perl::MinimumVersion::Fast'  => '0',
 		'Module::Extract::Namespaces' => '0',
 		'ReturnValue'                 => '0',
-		'Compiler::Lexer'             => '0.13',
+		'Compiler::Lexer'             => '0.19',
 		'Import::Into'                => '0',
 
 		'Cwd'                         => '0',
