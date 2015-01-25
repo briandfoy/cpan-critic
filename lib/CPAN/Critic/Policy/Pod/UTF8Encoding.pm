@@ -1,4 +1,4 @@
-package CPAN::Critic::Policy::UTF8EncodingInPod;
+package CPAN::Critic::Policy::Pod::UTF8Encoding;
 use v5.10;
 
 use ReturnValue;
@@ -7,7 +7,7 @@ use ReturnValue;
 
 =head1 NAME
 
-CPAN::Critic::Policy::UTF8EncodingInPod - Check that the pod has UTF-8 set
+CPAN::Critic::Policy::Pod::UTF8Encoding - Check that the pod has UTF-8 set
 
 =head1 SYNOPSIS
 
