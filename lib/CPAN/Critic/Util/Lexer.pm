@@ -3,7 +3,7 @@ use 5.010;
 
 use CPAN::Critic::Basics;
 
-use Compiler::Lexer 0.13;
+use Compiler::Lexer 0.19;
 
 =encoding utf8
 
