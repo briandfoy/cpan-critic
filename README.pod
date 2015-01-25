@@ -4,10 +4,13 @@
 
 =head1 The CPAN::Critic module
 
-This is the I<README> for the L<CPAN::Critic> Perl module. You're probably 
-looking at this because you don't know where else to find what you're
-looking for. Read this once and you might never have to read one again 
-for any Perl module.
+This is the I<README> for the L<CPAN::Critic> Perl module—a tool
+to critique a distribution directory for various things that I 
+find important.
+
+You're probably looking at this because you don't know where else to
+find what you're looking for. Read this once and you might never have
+to read one again for any Perl module.
 
 =head2 Documentation
 
