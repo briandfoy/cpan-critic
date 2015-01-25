@@ -34,6 +34,7 @@ my %WriteMakefile = (
 		},
 
 	'PREREQ_PM'     => {
+		'Config::Tiny'                => '0',
 		'CPAN::Changes'               => '0',
 		'Perl::MinimumVersion::Fast'  => '0',
 		'Module::Extract::Namespaces' => '0',
