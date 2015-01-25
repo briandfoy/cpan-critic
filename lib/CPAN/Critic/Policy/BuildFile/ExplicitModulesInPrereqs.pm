@@ -1,6 +1,6 @@
-package CPAN::Critic::Policy::ExplicitModulesInConfigureRequires;
+package CPAN::Critic::Policy::BuildFile::ExplicitModulesInPrereqs;
 use v5.10;
-use parent qw(CPAN::Critic::Policy::ExplicitModules);
+use parent qw(CPAN::Critic::Policy::BuildFile::ExplicitModules);
 
 use CPAN::Critic::Basics;
 
@@ -8,7 +8,7 @@ use CPAN::Critic::Basics;
 
 =head1 NAME
 
-CPAN::Critic::Policy::ExplicitModulesInConfigureRequires - Check that all used modules show up in the named key
+CPAN::Critic::Policy::BuildFile::ExplicitModulesInPrereqs - Check that all used modules show up in the prereqs
 
 =head1 SYNOPSIS
 
@@ -22,13 +22,8 @@ CPAN::Critic::Policy::ExplicitModulesInConfigureRequires - Check that all used m
 
 =cut
 
-my %Ignores = map { $_, 1 } qw(
-	strict warnings vars subs
-	feature
-	);
-
-sub MM_key      { 'CONFIGURE_REQUIRES' }
-sub find_method { 'get_build_files' }
+sub MM_key      { 'PREREQ_PM' }
+sub find_method { 'get_module_files' }
 
 sub run { $_[0]->_run }
 

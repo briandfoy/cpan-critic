@@ -1,15 +1,13 @@
-package CPAN::Critic::Policy::ABSTRACT_FROM;
+package CPAN::Critic::Policy::BuildFile::BugTracker;
 use v5.10;
 
 use CPAN::Critic::Basics;
-
-use ExtUtils::MM_Unix;
 
 =encoding utf8
 
 =head1 NAME
 
-CPAN::Critic::Policy::ABSTRACT_FROM - Check that the ABSTRACT_FROM is in the Makefile.PL
+CPAN::Critic::Policy::BuildFile::BugTracker - The Makefile arguments specifies a bugtracker
 
 =head1 SYNOPSIS
 
@@ -29,43 +27,37 @@ sub run {
 	my( $class, @args ) = @_;
 	my @problems;
 
-	my $rv = CPAN::Critic::Util::MakefilePL->get_args();
+	my $rv = CPAN::Critic::Util::MakefilePL->get_args;
 	return $rv unless $rv->is_success;
 
 	my $args = $rv->value;
 
-	no warnings 'uninitialized';
-	my $abstract = eval {
-		my $object = bless {
-			DISTNAME => $args->{NAME},
-			}, 'ExtUtils::MM_Unix';
-
-		$object->parse_abstract( $args->{ABSTRACT_FROM} )
+	my $url = eval {
+		$args->{META_MERGE}{resources}{bugtracker}{web}
 		};
 
 	my( $value, $description ) = do {
-		if( ! exists $args->{ABSTRACT_FROM} ) {
-			( 0, 'ABSTRACT_FROM is in the data structure' );
+		if( ! exists $args->{META_MERGE} ) {
+			( 0, 'META_MERGE is in the data structure' );
 			}
-		elsif( ! -e $args->{ABSTRACT_FROM} ) {
-			( 0, 'ABSTRACT_FROM file is there' );
+		elsif( ! exists $args->{META_MERGE}{resources} ) {
+			( 0, 'META_MERGE/resources is in the data structure' );
 			}
-		elsif( ! -r $args->{ABSTRACT_FROM} ) {
-			( 0, 'ABSTRACT_FROM file is readable' );
+		elsif( ! exists $args->{META_MERGE}{resources}{bugtracker} ) {
+			( 0, 'META_MERGE/resources/bugtracker is in the data structure' );
 			}
-		elsif( ! $abstract ) {
-			( 0, 'ABSTRACT_FROM is there' );
+		elsif( ! $args->{META_MERGE}{resources}{bugtracker}{web} ) {
+			( 0, 'META_MERGE/resources/bugtracker/web file is there' );
 			}
-		elsif( $abstract =~ m/This/ ) {
-			( 0, "ABSTRACT_FROM doesn't have boilerplate" );
+		elsif( $url !~ m/issues/ ) {
+			( 0, "bugtracker has /issues, literally" );
 			}
 		else {
-			( $abstract, 'The abstract is okay' );
+			( $url, 'The bugtracker is there' );
 			}
 		};
 
 	push @problems, CPAN::Critic::Problem->new(
-		value       => $value,
 		description => $description,
 		file        => $FILE,
 		) unless $value;

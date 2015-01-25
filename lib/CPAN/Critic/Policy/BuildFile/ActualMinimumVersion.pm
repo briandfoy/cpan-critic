@@ -1,4 +1,4 @@
-package CPAN::Critic::Policy::ActualMinimumVersion;
+package CPAN::Critic::Policy::BuildFile::ActualMinimumVersion;
 use v5.10;
 
 use CPAN::Critic::Basics;
@@ -9,7 +9,7 @@ use Perl::MinimumVersion::Fast;
 
 =head1 NAME
 
-CPAN::Critic::Policy::ActualMinimumVersion - Check that the declared minimum version matches the actual one match
+CPAN::Critic::Policy::BuildFile::ActualMinimumVersion - Check that the declared minimum version matches the actual one match
 
 =head1 SYNOPSIS
 

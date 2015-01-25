@@ -1,13 +1,15 @@
-package CPAN::Critic::Policy::RepositoryIsHTTP;
+package CPAN::Critic::Policy::BuildFile::ABSTRACT_FROM;
 use v5.10;
 
 use CPAN::Critic::Basics;
+
+use ExtUtils::MM_Unix;
 
 =encoding utf8
 
 =head1 NAME
 
-CPAN::Critic::Policy::RepositoryIsHTTP - The Makefile arguments specifies a bugtracker
+CPAN::Critic::Policy::BuildFile::ABSTRACT_FROM - Check that the ABSTRACT_FROM is in the Makefile.PL
 
 =head1 SYNOPSIS
 
@@ -21,41 +23,49 @@ CPAN::Critic::Policy::RepositoryIsHTTP - The Makefile arguments specifies a bugt
 
 =cut
 
+my $FILE = 'Makefile.PL';
+
 sub run {
 	my( $class, @args ) = @_;
 	my @problems;
 
-	my $rv = CPAN::Critic::Util::MakefilePL->get_args;
+	my $rv = CPAN::Critic::Util::MakefilePL->get_args();
 	return $rv unless $rv->is_success;
 
 	my $args = $rv->value;
 
-	my $url = eval {
-		$args->{META_MERGE}{resources}{repository}{url}
+	no warnings 'uninitialized';
+	my $abstract = eval {
+		my $object = bless {
+			DISTNAME => $args->{NAME},
+			}, 'ExtUtils::MM_Unix';
+
+		$object->parse_abstract( $args->{ABSTRACT_FROM} )
 		};
 
 	my( $value, $description ) = do {
-		if( ! exists $args->{META_MERGE} ) {
-			( 0, 'META_MERGE is in the data structure' );
+		if( ! exists $args->{ABSTRACT_FROM} ) {
+			( 0, 'ABSTRACT_FROM is in the data structure' );
 			}
-		elsif( ! exists $args->{META_MERGE}{resources} ) {
-			( 0, 'META_MERGE/resources is in the data structure' );
+		elsif( ! -e $args->{ABSTRACT_FROM} ) {
+			( 0, 'ABSTRACT_FROM file is there' );
 			}
-		elsif( ! exists $args->{META_MERGE}{resources}{repository} ) {
-			( 0, 'META_MERGE/resources/repository is in the data structure' );
+		elsif( ! -r $args->{ABSTRACT_FROM} ) {
+			( 0, 'ABSTRACT_FROM file is readable' );
 			}
-		elsif( ! $args->{META_MERGE}{resources}{repository}{url} ) {
-			( 0, 'META_MERGE/resources/repository/url file is there' );
+		elsif( ! $abstract ) {
+			( 0, 'ABSTRACT_FROM is there' );
 			}
-		elsif( $url !~ m/\A http s? : /x ) {
-			( 0, "The repository URL is HTTP" );
+		elsif( $abstract =~ m/This/ ) {
+			( 0, "ABSTRACT_FROM doesn't have boilerplate" );
 			}
 		else {
-			( $url, 'The repository URL checks out' );
+			( $abstract, 'The abstract is okay' );
 			}
 		};
 
 	push @problems, CPAN::Critic::Problem->new(
+		value       => $value,
 		description => $description,
 		file        => $FILE,
 		) unless $value;

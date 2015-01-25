@@ -1,4 +1,4 @@
-package CPAN::Critic::Policy::ABSTRACT;
+package CPAN::Critic::Policy::Pod::ABSTRACT;
 use v5.20;
 
 use CPAN::Critic::Basics;
@@ -9,7 +9,7 @@ use ExtUtils::MM_Unix;
 
 =head1 NAME
 
-CPAN::Critic::Policy::ABSTRACT - Every module has an abstract
+CPAN::Critic::Policy::Pod::ABSTRACT - Every module has an abstract
 
 =head1 SYNOPSIS
 

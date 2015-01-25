@@ -1,4 +1,4 @@
-package CPAN::Critic::Policy::ExplicitModules;
+package CPAN::Critic::Policy::BuildFile::ExplicitModules;
 use v5.20;
 
 use CPAN::Critic::Basics;
@@ -7,7 +7,7 @@ use CPAN::Critic::Basics;
 
 =head1 NAME
 
-CPAN::Critic::Policy::ExplicitModules - Check that all used modules show up in tests are in TEST_REQUIRES
+CPAN::Critic::Policy::BuildFile::ExplicitModules - Check that all used modules show up in tests are in TEST_REQUIRES
 
 =head1 SYNOPSIS
 

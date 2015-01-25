@@ -1,4 +1,4 @@
-package CPAN::Critic::Policy::Changes;
+package CPAN::Critic::Policy::Files::Changes;
 use v5.10;
 
 use CPAN::Critic::Basics;
@@ -9,7 +9,7 @@ use CPAN::Changes;
 
 =head1 NAME
 
-CPAN::Critic::Policy::Changes - Check the Changes file
+CPAN::Critic::Policy::Files::Changes - Check the Changes file
 
 =head1 SYNOPSIS
 

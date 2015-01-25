@@ -1,4 +1,4 @@
-package CPAN::Critic::Policy::MIN_PERL_VERSION;
+package CPAN::Critic::Policy::Pod::SeeAlso;
 use v5.10;
 
 use CPAN::Critic::Basics;
@@ -7,7 +7,7 @@ use CPAN::Critic::Basics;
 
 =head1 NAME
 
-CPAN::Critic::Policy::MIN_PERL_VERSION - Check that the declared minimum version matches the actual one
+CPAN::Critic::Policy::Pod::SeeAlso - Check for SEE ALSO, somewhere
 
 =head1 SYNOPSIS
 
@@ -25,30 +25,19 @@ sub run {
 	my( $class, @args ) = @_;
 	my @problems;
 
-	my $rv = CPAN::Critic::Util::MakefilePL->check_if_modulino();
-	return $rv unless $rv->is_success;
-
-	my $args = $rv->value;
-
-	no warnings 'uninitialized';
-
-	my( $value, $description ) = do {
-		if( ! exists $args->{MIN_PERL_VERSION} ) {
-			( 0, 'MIN_PERL_VERSION is in the data structure' );
-			}
-		else {
-			( $args->{MIN_PERL_VERSION}, 'The minimum version is there' );
-			}
-		};
+	my( $value, $description ) = (
+		1,
+		'Null',
+		);
 
 	my $method = @problems ? 'error' : 'success';
 
 	ReturnValue->$method(
 		value       => \@problems,
+		description => $description,
 		policy      => $class,
 		);
 	}
-
 
 =back
 

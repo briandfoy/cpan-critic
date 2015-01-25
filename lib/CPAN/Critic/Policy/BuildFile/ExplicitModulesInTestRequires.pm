@@ -1,5 +1,6 @@
-package CPAN::Critic::Policy::SeeAlso;
+package CPAN::Critic::Policy::BuildFile::ExplicitModulesInTestRequires;
 use v5.10;
+use parent qw(CPAN::Critic::Policy::BuildFile::ExplicitModules);
 
 use CPAN::Critic::Basics;
 
@@ -7,7 +8,7 @@ use CPAN::Critic::Basics;
 
 =head1 NAME
 
-CPAN::Critic::Policy::SeeAlso - Check for SEE ALSO, somewhere
+CPAN::Critic::Policy::BuildFile::ExplicitModulesInTestRequires - Check that all used modules show up in tests are in TEST_REQUIRES
 
 =head1 SYNOPSIS
 
@@ -21,23 +22,10 @@ CPAN::Critic::Policy::SeeAlso - Check for SEE ALSO, somewhere
 
 =cut
 
-sub run {
-	my( $class, @args ) = @_;
-	my @problems;
+sub MM_key      { 'TEST_REQUIRES' }
+sub find_method { 'get_test_files' }
 
-	my( $value, $description ) = (
-		1,
-		'Null',
-		);
-
-	my $method = @problems ? 'error' : 'success';
-
-	ReturnValue->$method(
-		value       => \@problems,
-		description => $description,
-		policy      => $class,
-		);
-	}
+sub run { $_[0]->_run }
 
 =back
 

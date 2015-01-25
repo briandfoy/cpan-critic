@@ -1,5 +1,5 @@
-package CPAN::Critic::Policy::TODO;
-use v5.10;
+package CPAN::Critic::Policy::Tests::TestMoreWithSubtests;
+use v5.20;
 
 use CPAN::Critic::Basics;
 
@@ -7,7 +7,7 @@ use CPAN::Critic::Basics;
 
 =head1 NAME
 
-CPAN::Critic::Policy::TODO - Check for a To Do file
+CPAN::Critic::Policy::Tests::TestMoreWithSubtests - Check that tests use subtests
 
 =head1 SYNOPSIS
 
@@ -21,31 +21,18 @@ CPAN::Critic::Policy::TODO - Check for a To Do file
 
 =cut
 
-my $FILE = 'TODO';
-
 sub run {
 	my( $class, @args ) = @_;
 	my @problems;
 
-	my( $value, $description ) = do {
-		if( ! -e $FILE ) {
-			( 0, "$FILE exists" );
-			}
-		elsif( ! -r $FILE ) {
-			( 0, "$FILE is readable" );
-			}
-		elsif( ! -s $FILE ) {
-			( 0, "$FILE has non-zero size" );
-			}
-		else {
-			( 1, "$FILE is good" );
-			}
-		};
+	my $files = CPAN::Critic::Util::FindFiles->get_test_files->value;
 
-	push @problems, CPAN::Critic::Problem->new(
-		description => $description,
-		file        => $FILE,
-		) unless $value;
+	foreach my $file ( $files->@* ) {
+		push @problems, CPAN::Critic::Problem->new(
+			description => "Test file ($file) uses subtests",
+			file        => $file,
+			) unless 1;
+		}
 
 	my $method = @problems ? 'error' : 'success';
 
@@ -54,6 +41,7 @@ sub run {
 		policy      => $class,
 		);
 	}
+
 
 =back
 

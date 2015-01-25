@@ -1,4 +1,4 @@
-package CPAN::Critic::Policy::DefaultManifestSkip;
+package CPAN::Critic::Policy::MANIFEST::DefaultManifestSkip;
 use v5.10;
 
 use CPAN::Critic::Basics;
@@ -7,7 +7,7 @@ use CPAN::Critic::Basics;
 
 =head1 NAME
 
-CPAN::Critic::Policy::DefaultManifestSkip - Check MANIFEST.SKIP uses the defaults
+CPAN::Critic::Policy::MANIFEST::DefaultManifestSkip - Check MANIFEST.SKIP uses the defaults
 
 =head1 SYNOPSIS
 

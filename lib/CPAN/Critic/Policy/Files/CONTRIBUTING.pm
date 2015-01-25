@@ -1,4 +1,4 @@
-package CPAN::Critic::Policy::CONTRIBUTING;
+package CPAN::Critic::Policy::Files::CONTRIBUTING;
 use v5.10;
 
 use CPAN::Critic::Basics;
@@ -7,7 +7,7 @@ use CPAN::Critic::Basics;
 
 =head1 NAME
 
-CPAN::Critic::Policy::CONTRIBUTING - Check that there's a contributing document
+CPAN::Critic::Policy::Files::CONTRIBUTING - Check that there's a contributing document
 
 =head1 SYNOPSIS
 
@@ -21,30 +21,32 @@ CPAN::Critic::Policy::CONTRIBUTING - Check that there's a contributing document
 
 =cut
 
-my $FILE = 'CONTRIBUTING';
+my @Files = qw( CONTRIBUTING CONTRIBUTING.md );
 
 sub run {
 	my( $class, @args ) = @_;
 	my @problems;
 
-	my( $value, $description, $tag ) = do {
-		if( ! -e $FILE ) {
-			( 0, "$FILE exists" );
+	my( $file ) = grep -e, @Files;
+
+	my( $value, $description ) = do {
+		if( ! -e $file ) {
+			( 0, "$file exists" );
 			}
-		elsif( ! -r $FILE ) {
-			( 0, "$FILE is readable" );
+		elsif( ! -r $file ) {
+			( 0, "$file is readable" );
 			}
-		elsif( ! -s $FILE ) {
-			( 0, "$FILE has non-zero size" );
+		elsif( ! -s $file ) {
+			( 0, "$file has non-zero size" );
 			}
 		else {
-			( 1, "$FILE is good" );
+			( 1, "$file is good" );
 			}
 		};
 
 	push @problems, CPAN::Critic::Problem->new(
 		description => $description,
-		file        => $FILE,
+		file        => $file,
 		) unless $value;
 
 	my $method = @problems ? 'error' : 'success';

@@ -1,4 +1,4 @@
-package CPAN::Critic::Policy::BugTracker;
+package CPAN::Critic::Policy::BuildFile::RepositoryIsHTTP;
 use v5.10;
 
 use CPAN::Critic::Basics;
@@ -7,7 +7,7 @@ use CPAN::Critic::Basics;
 
 =head1 NAME
 
-CPAN::Critic::Policy::BugTracker - The Makefile arguments specifies a bugtracker
+CPAN::Critic::Policy::BuildFile::RepositoryIsHTTP - The Makefile arguments specifies a bugtracker
 
 =head1 SYNOPSIS
 
@@ -33,7 +33,7 @@ sub run {
 	my $args = $rv->value;
 
 	my $url = eval {
-		$args->{META_MERGE}{resources}{bugtracker}{web}
+		$args->{META_MERGE}{resources}{repository}{url}
 		};
 
 	my( $value, $description ) = do {
@@ -43,17 +43,17 @@ sub run {
 		elsif( ! exists $args->{META_MERGE}{resources} ) {
 			( 0, 'META_MERGE/resources is in the data structure' );
 			}
-		elsif( ! exists $args->{META_MERGE}{resources}{bugtracker} ) {
-			( 0, 'META_MERGE/resources/bugtracker is in the data structure' );
+		elsif( ! exists $args->{META_MERGE}{resources}{repository} ) {
+			( 0, 'META_MERGE/resources/repository is in the data structure' );
 			}
-		elsif( ! $args->{META_MERGE}{resources}{bugtracker}{web} ) {
-			( 0, 'META_MERGE/resources/bugtracker/web file is there' );
+		elsif( ! $args->{META_MERGE}{resources}{repository}{url} ) {
+			( 0, 'META_MERGE/resources/repository/url file is there' );
 			}
-		elsif( $url !~ m/issues/ ) {
-			( 0, "bugtracker has /issues, literally" );
+		elsif( $url !~ m/\A http s? : /x ) {
+			( 0, "The repository URL is HTTP" );
 			}
 		else {
-			( $url, 'The bugtracker is there' );
+			( $url, 'The repository URL checks out' );
 			}
 		};
 

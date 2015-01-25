@@ -1,11 +1,11 @@
-package CPAN::Critic::Policy::Travis;
+package CPAN::Critic::Policy::Services::Travis;
 use v5.10;
 
 =encoding utf8
 
 =head1 NAME
 
-CPAN::Critic::Policy::Travis - Check the Travis CI configuration file
+CPAN::Critic::Policy::Services::Travis - Check the Travis CI configuration file
 
 =head1 SYNOPSIS
 
