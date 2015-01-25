@@ -1,6 +1,7 @@
 /* CONTRIBUTE */
 
-This is the contribute.md of our project. Great to have you here. Here are a few ways you can help make this project better!
+This is the contribute.md of our project. Great to have you here. Here
+are a few ways you can help make this project better!
 
 # Contribute.md
 
@@ -10,7 +11,9 @@ This section introduces the core team members.
 
 ## Learn & listen
 
-This section includes ways to get started with your open source project. Include links to documentation and to different communication channels: 
+This section includes ways to get started with your open source
+project. Include links to documentation and to different communication
+channels: 
 
 * Mailing list: 
 * IRC channel:  
@@ -19,7 +22,8 @@ This section includes ways to get started with your open source project. Include
 
 ## Adding new features
 
-This section includes advice on how to build new features for the project & what kind of process it includes. 
+This section includes advice on how to build new features for the
+project & what kind of process it includes. 
 
 * This is how we like people to add new features:         
 * Here are some specifics on the coding style we prefer:   
@@ -32,7 +36,9 @@ maintainers is around:
 
 # Bug triage
 
-This sections explains how bug triaging is done for your project. Help beginners by including examples to good bug reports and providing them questions they should look to answer. 
+This sections explains how bug triaging is done for your project. Help
+beginners by including examples to good bug reports and providing them
+questions they should look to answer. 
 
 * You can help report bugs by filing them here: 
 * You can look through the existing bugs here: 
@@ -48,7 +54,9 @@ happening
 
 # Beta testing
 
-This section explains if your project needs beta testing. Explain why early releases require heavy testing and how they can help with specially across browsers and on different hardware. 
+This section explains if your project needs beta testing. Explain why
+early releases require heavy testing and how they can help with
+specially across browsers and on different hardware. 
 
 * For our project you can find the roadmap and features that require
 testing from here: 
@@ -61,12 +69,16 @@ This section includes any instructions or translation needs your project has.
 
 # Documentation
 
-This section includes any help you need with the documentation and where it can be found. Code needs explanation, and sometimes those who know the code well have trouble explaining it to someone just getting into it. 
+This section includes any help you need with the documentation and
+where it can be found. Code needs explanation, and sometimes those who
+know the code well have trouble explaining it to someone just getting
+into it. 
 
 * Help us with documentation here
 
 # Community 
-This section includes ideas on how non-developers can help with the project. Here's a few examples:
+This section includes ideas on how non-developers can help with the
+project. Here's a few examples:
 
 * You can help us answer questions our users have here: 
 * You can help build and design our website here:
@@ -80,6 +92,7 @@ it’s used in daily life. Take screenshots and make videos!
 
 
 # Your first bugfix
-This section should help a person get started with their very first bug fix and thinking through the problem.
+This section should help a person get started with their very first
+bug fix and thinking through the problem.
 
 * If you have further questions, contact: 
