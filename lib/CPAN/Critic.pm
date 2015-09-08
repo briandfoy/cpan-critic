@@ -12,6 +12,8 @@ our $VERSION = '0.001_001';
 
 =encoding utf8
 
+=encoding utf8
+
 =head1 NAME
 
 CPAN::Critic - Critique a CPAN distribution
