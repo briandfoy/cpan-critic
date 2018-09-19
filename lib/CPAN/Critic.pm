@@ -12,8 +12,6 @@ our $VERSION = '0.001_001';
 
 =encoding utf8
 
-=encoding utf8
-
 =head1 NAME
 
 CPAN::Critic - Critique a CPAN distribution
@@ -62,7 +60,15 @@ sub _init {
 
 sub _default_config    { 'cpan-critic.ini' }
 
+=item config_file_exists
+
+=cut
+
 sub config_file_exists { -e $_[0]->_default_config }
+
+=item load_config
+
+=cut
 
 sub load_config {
 	my( $self ) = @_;
@@ -71,6 +77,10 @@ sub load_config {
 
 	my $config = Config::Tiny->new->read( $file );
 	}
+
+=item disabled_policies
+
+=cut
 
 sub disabled_policies {
 	my( $self ) = @_;
