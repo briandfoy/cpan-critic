@@ -19,7 +19,7 @@ CPAN::Critic::Policy::BuildFile::ActualMinimumVersion - Check that the declared 
 
 =over 4
 
-=item new
+=item run
 
 =cut
 

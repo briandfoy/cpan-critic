@@ -31,7 +31,7 @@ CPAN::Critic::Basics - Things everyone needs
 
 =over 4
 
-=item new
+=item import
 
 =cut
 

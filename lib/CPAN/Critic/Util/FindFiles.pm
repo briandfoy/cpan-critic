@@ -20,17 +20,33 @@ CPAN::Critic::Util::FindFiles - Find files easily
 
 =over 4
 
-=item new
+=item get_module_files
 
 =cut
 
 sub get_module_files     { $_[0]->find_by_extension( 'pm' ) }
 
+=item get_pod_files
+
+=cut
+
 sub get_pod_files        { $_[0]->find_by_extension( 'pod' ) }
+
+=item get_all_pod_files
+
+=cut
 
 sub get_all_pod_files    { $_[0]->find_by_extension( qw(pod pm pl PL) ) }
 
+=item get_test_files
+
+=cut
+
 sub get_test_files       { $_[0]->find_by_extension( 't' ) }
+
+=item get_build_files
+
+=cut
 
 sub get_build_files      {
 	my @files = grep { -e $_ } qw( Makefile.PL Build.PL );
@@ -38,6 +54,10 @@ sub get_build_files      {
 		value => \@files,
 		);
 	}
+
+=item find_by_name
+
+=cut
 
 sub find_by_name {
 	my( $class, @names ) = @_;
@@ -55,6 +75,10 @@ sub find_by_name {
 		value => \@files,
 		);
 	}
+
+=item find_by_extension
+
+=cut
 
 sub find_by_extension {
 	my( $class, @extensions ) = @_;

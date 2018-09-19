@@ -18,14 +18,24 @@ CPAN::Critic::Policy::BuildFile::ExplicitModulesInPrereqs - Check that all used 
 
 =over 4
 
-=item new
+=item run
+
+=cut
+
+sub run { $_[0]->_run }
+
+=item MM_key
 
 =cut
 
 sub MM_key      { 'PREREQ_PM' }
+
+=item find_method
+
+=cut
+
 sub find_method { 'get_module_files' }
 
-sub run { $_[0]->_run }
 
 =back
 

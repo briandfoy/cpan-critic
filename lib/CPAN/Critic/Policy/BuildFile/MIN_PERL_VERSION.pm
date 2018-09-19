@@ -17,7 +17,7 @@ CPAN::Critic::Policy::BuildFile::MIN_PERL_VERSION - Check that the declared mini
 
 =over 4
 
-=item new
+=item run
 
 =cut
 

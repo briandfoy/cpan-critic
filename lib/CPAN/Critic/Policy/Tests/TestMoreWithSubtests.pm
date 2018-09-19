@@ -17,7 +17,7 @@ CPAN::Critic::Policy::Tests::TestMoreWithSubtests - Check that tests use subtest
 
 =over 4
 
-=item new
+=item run
 
 =cut
 

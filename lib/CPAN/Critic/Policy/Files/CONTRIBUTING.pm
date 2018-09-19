@@ -17,7 +17,7 @@ CPAN::Critic::Policy::Files::CONTRIBUTING - Check that there's a contributing do
 
 =over 4
 
-=item new
+=item run
 
 =cut
 

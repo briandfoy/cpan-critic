@@ -19,10 +19,9 @@ CPAN::Critic::Util::Lexer - Extract things from Perl files
 
 =over 4
 
-=item new
+=item get_namespaces
 
 =cut
-
 
 sub get_namespaces {
 	my( $class, $file ) = @_;
@@ -58,6 +57,9 @@ sub get_namespaces {
 		);
 	}
 
+=item tokenize
+
+=cut
 
 sub tokenize {
 	my( $class, $file ) = @_;
@@ -81,9 +83,17 @@ UseDecl Namespace (NamespaceResolver Namespace)+ (Double)+
 
 =cut
 
+=item is_use
+
+=cut
+
 sub is_use {
 	$_[0]->name eq 'UseDecl' || $_[0]->name eq 'RequireDecl'
 	}
+
+=item is_num
+
+=cut
 
 sub is_num {
 	$_[0]->name eq 'Int' || $_[0]->name eq 'Double'

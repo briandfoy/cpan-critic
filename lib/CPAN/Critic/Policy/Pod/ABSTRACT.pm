@@ -19,7 +19,7 @@ CPAN::Critic::Policy::Pod::ABSTRACT - Every module has an abstract
 
 =over 4
 
-=item new
+=item run
 
 =cut
 

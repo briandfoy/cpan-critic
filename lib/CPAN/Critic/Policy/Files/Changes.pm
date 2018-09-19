@@ -19,7 +19,7 @@ CPAN::Critic::Policy::Files::Changes - Check the Changes file
 
 =over 4
 
-=item new
+=item run
 
 =cut
 

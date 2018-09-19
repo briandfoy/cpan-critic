@@ -19,7 +19,7 @@ CPAN::Critic::Policy::BuildFile::ABSTRACT_FROM - Check that the ABSTRACT_FROM is
 
 =over 4
 
-=item new
+=item run
 
 =cut
 

@@ -17,7 +17,7 @@ CPAN::Critic::Policy::MANIFEST::DefaultManifestSkip - Check MANIFEST.SKIP uses t
 
 =over 4
 
-=item new
+=item run
 
 =cut
 

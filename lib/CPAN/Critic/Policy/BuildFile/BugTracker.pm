@@ -17,7 +17,7 @@ CPAN::Critic::Policy::BuildFile::BugTracker - The Makefile arguments specifies a
 
 =over 4
 
-=item new
+=item run
 
 =cut
 

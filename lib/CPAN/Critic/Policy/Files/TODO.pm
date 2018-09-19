@@ -17,7 +17,7 @@ CPAN::Critic::Policy::Files::TODO - Check for a To Do file
 
 =over 4
 
-=item new
+=item run
 
 =cut
 

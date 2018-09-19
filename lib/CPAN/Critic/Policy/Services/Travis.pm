@@ -15,7 +15,7 @@ CPAN::Critic::Policy::Services::Travis - Check the Travis CI configuration file
 
 =over 4
 
-=item new
+=item run
 
 =cut
 

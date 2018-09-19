@@ -18,19 +18,29 @@ CPAN::Critic::Policy::BuildFile::ExplicitModulesInConfigureRequires - Check that
 
 =over 4
 
-=item new
+=item run
 
 =cut
+
+sub run { $_[0]->_run }
 
 my %Ignores = map { $_, 1 } qw(
 	strict warnings vars subs
 	feature
 	);
 
+=item MM_key
+
+=cut
+
 sub MM_key      { 'CONFIGURE_REQUIRES' }
+
+=item find_method
+
+=cut
+
 sub find_method { 'get_build_files' }
 
-sub run { $_[0]->_run }
 
 =back
 

@@ -18,14 +18,24 @@ CPAN::Critic::Policy::BuildFile::ExplicitModulesInTestRequires - Check that all 
 
 =over 4
 
-=item new
+=item run
+
+=cut
+
+sub run { $_[0]->_run }
+
+=item MM_key
 
 =cut
 
 sub MM_key      { 'TEST_REQUIRES' }
+
+=item find_method
+
+=cut
+
 sub find_method { 'get_test_files' }
 
-sub run { $_[0]->_run }
 
 =back
 

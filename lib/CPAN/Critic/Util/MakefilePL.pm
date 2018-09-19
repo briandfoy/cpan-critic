@@ -20,17 +20,23 @@ CPAN::Critic::Util::MakefilePL - Do things with the Makefile.PL
 
 =over 4
 
-=item new
-
 =cut
 
 my $FILE = "Makefile.PL";
 
 my $REGISTRY = {};
 
+=item get_args
+
+=cut
+
 sub get_args {
 	$_[0]->check_if_modulino;
 	}
+
+=item check_if_modulino
+
+=cut
 
 sub check_if_modulino {
 	my( $class, $arg ) = @_;

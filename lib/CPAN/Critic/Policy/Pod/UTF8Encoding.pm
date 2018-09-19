@@ -17,7 +17,7 @@ CPAN::Critic::Policy::Pod::UTF8Encoding - Check that the pod has UTF-8 set
 
 =over 4
 
-=item new
+=item run
 
 =cut
 

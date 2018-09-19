@@ -21,7 +21,7 @@ CPAN::Critic::Util - Stuff you need in the other parts
 
 =over 4
 
-=item new
+=item extract_package
 
 =cut
 

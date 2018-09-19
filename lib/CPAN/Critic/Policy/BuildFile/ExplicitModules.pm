@@ -17,7 +17,7 @@ CPAN::Critic::Policy::BuildFile::ExplicitModules - Check that all used modules s
 
 =over 4
 
-=item new
+=item run
 
 =cut
 
@@ -26,6 +26,9 @@ my %Ignores = map { $_, 1 } qw(
 	feature
 	);
 
+=item provides
+
+=cut
 
 sub provides {
 	state $namespaces = [];

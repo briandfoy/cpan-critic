@@ -17,7 +17,7 @@ CPAN::Critic::Policy::Pod::SeeAlso - Check for SEE ALSO, somewhere
 
 =over 4
 
-=item new
+=item run
 
 =cut
 
