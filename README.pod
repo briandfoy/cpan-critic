@@ -35,17 +35,8 @@ name instead of the file location:
 
 	% perldoc CPAN::Critic
 
-You can read the documentation and inspect the meta data on one of the
-CPAN web interfaces, such as L<CPAN Search|http://search.cpan.org/dist/CPAN-Critic> or
-L<MetaCPAN|http://www.metacpan.org/module/CPAN::Critic>:
-
-=over 4
-
-=item *	L<http://search.cpan.org/dist/CPAN-Critic>
-
-=item *	L<http://www.metacpan.org/module/CPAN::Critic>
-
-=back
+You can read the documentation and inspect the meta data on
+L<MetaCPAN|http://www.metacpan.org/module/CPAN::Critic>.
 
 The standard module documentation has example uses in the SYNOPSIS
 section, but you can also look in the I<examples/> directory (if it's
