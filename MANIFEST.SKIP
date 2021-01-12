@@ -69,3 +69,6 @@
 \.releaserc
 \.lwpcookies
 \.travis\.yml
+\bMANIFEST\s\d
+\bChanges\s\d
+
