@@ -1,16 +1,16 @@
-# brian's standard GitHub Actions Windows config for Perl 5 modules
+# brian's standard GitHub Actions macOS config for Perl 5 modules
 # version 20220827.001
 # https://github.com/briandfoy/github_workflows
 # https://github.com/features/actions
 # This file is licensed under the Artistic License 2.0
-name: windows
+name: macos
 
 on:
     push:
         branches:
             - '**'
+            - '!**windows**'
             - '!**linux**'
-            - '!**macos**'
             - '!**release**'
         tags-ignore:
             # I tag release pushes but those should have already been tested
@@ -21,8 +21,8 @@ on:
             - '.appveyor.yml'
             - '.gitattributes'
             - '.github/workflows/linux.yml'
-            - '.github/workflows/macos.yml'
             - '.github/workflows/release.yml'
+            - '.github/workflows/windows.yml'
             - '.gitignore'
             - '.releaserc'
             - 'Changes'
@@ -32,30 +32,38 @@ on:
 
 jobs:
     perl:
-        runs-on: ${{ matrix.os }}
-        # store any secrets in an environment named "testing"
-        strategy:
-          matrix:
-            os:
-                - windows-2019
-                - windows-2022
+        runs-on: macOS-latest
         steps:
             - uses: actions/checkout@v2
+            - name: Platform check
+              run: uname -a
             - name: Set up Perl
               run: |
-                choco install strawberryperl
-                echo "C:\strawberry\c\bin"         | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-                echo "C:\strawberry\perl\site\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-                echo "C:\strawberry\perl\bin"      | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-            - name: Perl version
+                brew install perl
+                ls -d /usr/local/Cellar/perl/*/bin | head -1 >> $GITHUB_PATH
+                perl -v | perl -0777 -ne 'm/(v5\.\d+)/ && print "PERL_VERSION=$1"' >> $GITHUB_ENV
+            - name: Perl version check
               run: perl -V
+# cpan can operate with https, but we need IO::SSL::Socket, which
+# does not come with Perl.
+#
+# When using cpan, use -M to specify the CDN-backed www.cpan.org
+# mirror. I've noticed that letting CPAN.pm auto-choose mirrors
+# sometimes selects things that the action can't reach.
+#
+# Also, use the -T option to not test the dependencies. Assume these
+# mainline modules are good and save lots of CI minutes.
+            - name: Prepare cpan
+              run: |
+                openssl version
+                cpan -M http://www.cpan.org -T IO::Socket::SSL HTTP::Tiny
+                cpan -M https://www.cpan.org -T ExtUtils::MakeMaker Test::Manifest
 # Install the dependencies, again not testing them. This installs the
 # module in the current directory, so we end up installing the module,
 # but that's not a big deal.
             - name: Install dependencies
               run: |
                 cpan -M https://www.cpan.org -T .
-                cpan -M https://www.cpan.org -T Test::Manifest
             - name: Run tests
               run: |
                 perl Makefile.PL
@@ -72,11 +80,9 @@ jobs:
 # Test in parallel to catch that, because other people will test your
 # stuff in parallel.
             - name: Run tests in parallel
-              env:
-                HARNESS_OPTIONS: j10
               run: |
                 perl Makefile.PL
-                make test
+                HARNESS_OPTIONS=j10 make test
 # The disttest target creates the distribution, unwraps it, changes
 # into the dist dir, then runs the tests there. That checks that
 # everything that should be in the dist is in the dist. If you forget
@@ -87,8 +93,10 @@ jobs:
                 perl Makefile.PL
                 make disttest
                 make clean
-# And, coverage reports
+# And, coverage reports, but only under 5.10 and later since modern
+# Devel::Cover instances don't work with 5.8
             - name: Run coverage tests
+              if: env.PERL_VERSION != 'v5.8'
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
