@@ -62,8 +62,8 @@ my %WriteMakefile = (
 		},
 
 	'TEST_REQUIRES' => {
-		'Test::More'                  => '1',
 		'File::Spec::Functions'       => '0',
+		'Test::More'                  => '1',
 		},
 
 	'PREREQ_PM'     => {
@@ -80,7 +80,7 @@ my %WriteMakefile = (
 		'File::Find'                  => '0',
 		'File::Spec::Functions'       => '0',
 		'parent'                      => '0',
-		'version'                     => '0',
+		'version'                     => '0.86',
 		'List::Util'                  => '0',
 		'Data::Dumper'                => '0',
 		},
